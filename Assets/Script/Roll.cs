@@ -3,21 +3,25 @@ using System.Collections;
 
 public class Roll : MonoBehaviour {
 
-	public bool m_hasRoll;
+	private bool m_hasClick;
 	
 	// Use this for initialization
 	void Start(){
-		m_hasRoll = false;
+		m_hasClick = false;
 	}
 
 	void OnMouseDown() {
-		if (!m_hasRoll) {
+		if (!m_hasClick) {
 	//		Debug.Log ("Rolled");
-			m_hasRoll = true;
+			m_hasClick = true;
 		}
 	}
 
-	public void SetRoll(bool hasRoll){
-		m_hasRoll = hasRoll;
+	public void SetClickDefualt(){
+		m_hasClick = false;
+	}
+
+	public bool GetClick(){
+		return m_hasClick;
 	}
 }

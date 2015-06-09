@@ -6,8 +6,12 @@ public class Gamecontroller : MonoBehaviour {
 	private float[] m_posPlayerX;
 	private float[] m_posPlayerY;
 	private bool[] m_posPlayer;
+	private int[] m_event;
+
+	private int m_eventStop;
 
 	private int m_currentPos;
+	private int m_pointDice;
 
 	public GameObject m_player;
 
@@ -15,13 +19,18 @@ public class Gamecontroller : MonoBehaviour {
 
 	public GameObject m_dice;
 
+	public GameObject m_buttonRoll;
+
 	// Use this for initialization
 	void Start () {
+		m_eventStop = 0;
+
 		m_state = "WaitRoll";
 		m_currentPos = 0;
 		m_posPlayerX = new float[40];
 		m_posPlayerY = new float[40];
 		m_posPlayer = new bool[40];
+		m_event = new int[40];
 
 		SetDefaultPos ();
 
@@ -30,80 +39,102 @@ public class Gamecontroller : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (m_state == "Move" && m_currentPos < 40)
+		if (m_state == "Move")
 			StartCoroutine (GoNextPos ());
 		if (m_state == "WaitRoll")
 			StartCoroutine (Roll ());
+		if (m_state == "Event")
+			Event();
+	}
+
+	private void Event(){
+		m_state = "DoingEvent";
+		if (m_event [m_currentPos] >= 0) {
+			m_currentPos = m_event[m_currentPos];
+			StartCoroutine(GoNextPos());
+		} else {
+			m_eventStop = Mathf.Abs( m_event[m_currentPos]);
+		}
 	}
 
 	private IEnumerator Roll(){
-		bool stop;
-		stop = m_dice.GetComponent<Dice> ().m_getPoint;
-	
-		m_state = "Rolled";
+		bool hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick();
+		float m_timeRandom = Random.Range(4F, 7F);
 
-		while (!stop) {
-			stop = m_dice.GetComponent<Dice> ().m_getPoint;
+		m_state = "Rolling";
+
+		while(!hasClick){
+			hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick();
 			yield return null;
 		}
 
-		m_dice.GetComponent<Dice> ().m_getPoint = false;
+		m_dice.GetComponent<Dice> ().StartRoll ();
 
-		yield return new WaitForSeconds (1f);
 
-		m_currentPos += m_dice.GetComponent<Dice> ().m_pointDice + 1;
+
+		yield return new WaitForSeconds (m_timeRandom);
+		m_dice.GetComponent<Dice> ().StopRoll ();
+
+		Debug.Log ("BEFORE : " + m_pointDice);
+
+		m_pointDice = m_dice.GetComponent<Dice> ().GetPointDice () + 1;
+
+		Debug.Log ("After : " + m_pointDice);
+
+		m_buttonRoll.GetComponent<Roll> ().SetClickDefualt();
 		m_state = "Move";
 
 		yield break;
 	}
 
 	private IEnumerator GoNextPos(){
-		Vector3 nextPos = new Vector3 (m_posPlayerX [m_currentPos], m_posPlayerY [m_currentPos], -2f);
-		Vector3 currPos = m_player.transform.position;
-
 		m_state = "Moving";
+		for (int i = 1; i <= m_pointDice; i++) {
+			if(m_currentPos < 39)
+				m_currentPos ++;
+			Vector3 nextPos = new Vector3 (m_posPlayerX [m_currentPos], m_posPlayerY [m_currentPos], -2f);
+			Vector3 currPos = m_player.transform.position;
 
-		Debug.Log (m_currentPos);
-		Debug.Log ("Curr Pos : " + currPos);
-		Debug.Log ("Next Pos : " + nextPos);
 
-		while (!Equal( currPos.x, nextPos.x) || !Equal( currPos.y, nextPos.y)) {
-			if (!Equal( currPos.x, nextPos.x) && !Equal( currPos.y, nextPos.y)) {
-				if(currPos.x > nextPos.x && currPos.y > nextPos.y){
-					currPos.x -= 0.01f;
-					currPos.y -= 0.01f;
-				}
-				else if(currPos.x < nextPos.x && currPos.y < nextPos.y){
-					currPos.x += 0.01f;
-					currPos.y += 0.01f;
-				}
-				else if(currPos.x > nextPos.x && currPos.y < nextPos.y){
-					currPos.x -= 0.01f;
-					currPos.y += 0.01f;
-				}
-				else if(currPos.x < nextPos.x && currPos.y > nextPos.y){
-					currPos.x += 0.01f;
-					currPos.y -= 0.01f;
-				}
 
-			} else if (!Equal( currPos.x, nextPos.x) ) {
-				if(currPos.x > nextPos.x){
-					currPos.x -= 0.01f;
+			Debug.Log (m_currentPos);
+			Debug.Log ("Curr Pos : " + currPos);
+			Debug.Log ("Next Pos : " + nextPos);
+
+
+			while (!Equal( currPos.x, nextPos.x) || !Equal( currPos.y, nextPos.y)) {
+				if (!Equal (currPos.x, nextPos.x) && !Equal (currPos.y, nextPos.y)) {
+					if (currPos.x > nextPos.x && currPos.y > nextPos.y) {
+						currPos.x -= 0.01f;
+						currPos.y -= 0.01f;
+					} else if (currPos.x < nextPos.x && currPos.y < nextPos.y) {
+						currPos.x += 0.01f;
+						currPos.y += 0.01f;
+					} else if (currPos.x > nextPos.x && currPos.y < nextPos.y) {
+						currPos.x -= 0.01f;
+						currPos.y += 0.01f;
+					} else if (currPos.x < nextPos.x && currPos.y > nextPos.y) {
+						currPos.x += 0.01f;
+						currPos.y -= 0.01f;
+					}
+			
+				} else if (!Equal (currPos.x, nextPos.x)) {
+					if (currPos.x > nextPos.x) {
+						currPos.x -= 0.01f;
+					} else {
+						currPos.x += 0.01f;
+					}
+				} else if (!Equal (currPos.y, nextPos.y)) {
+					if (currPos.y > nextPos.y) {
+						currPos.y -= 0.01f;
+					} else {
+						currPos.y += 0.01f;
+					}
 				}
-				else{
-					currPos.x += 0.01f;
-				}
-			} else if (!Equal( currPos.y, nextPos.y)) {
-				if(currPos.y > nextPos.y){
-					currPos.y -= 0.01f;
-				}
-				else{
-					currPos.y += 0.01f;
-				}
+			
+				m_player.transform.position = currPos;
+				yield return new WaitForSeconds (0.001f);
 			}
-
-			m_player.transform.position = currPos;
-			yield return new WaitForSeconds(0.01f);
 		}
 
 		Debug.Log ("WAIT FOR GO NEXT POS");
