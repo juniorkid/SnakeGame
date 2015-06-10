@@ -1,10 +1,12 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\Gamecontroller.cs">
     <Files>
-      <File FileName="Assets\Script\Gamecontroller.cs" Line="87" Column="15" />
-      <File FileName="Assets\Script\Dice.cs" Line="30" Column="21" />
+      <File FileName="Assets\Script\Gamecontroller.cs" Line="110" Column="2" />
+      <File FileName="Assets\Script\Dice.cs" Line="48" Column="4" />
       <File FileName="Assets\Script\Roll.cs" Line="25" Column="9" />
+      <File FileName="Assets\Pixelplacement\iTweenPath\iTweenPath.cs" Line="65" Column="1" />
+      <File FileName="Assets\Plugins\Pixelplacement\iTween\iTween.cs" Line="1351" Column="7" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -45,7 +45,7 @@ public class Dice : MonoBehaviour {
 		m_startRoll = false;
 		m_speedRoll = 0.01f;
 		while (!m_stopRoll) {
-			Debug.Log ("Roll : " + m_pointDice);
+	//		Debug.Log ("Roll : " + m_pointDice);
 			m_pointDice ++;
 			if(m_pointDice > 5){
 				m_pointDice = 0;

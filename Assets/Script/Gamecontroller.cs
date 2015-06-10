@@ -10,6 +10,8 @@ public class Gamecontroller : MonoBehaviour {
 
 	private int m_eventStop;
 
+	private string[] m_upDownPos;
+
 	private int m_currentPos;
 	private int m_pointDice;
 
@@ -31,6 +33,23 @@ public class Gamecontroller : MonoBehaviour {
 		m_posPlayerY = new float[40];
 		m_posPlayer = new bool[40];
 		m_event = new int[40];
+		m_upDownPos = new string[40];
+
+		m_upDownPos [6] = "UP1";
+		m_upDownPos [11] = "UP2";
+		m_upDownPos [23] = "UP3";
+		m_upDownPos [28] = "DOWN1";
+		m_upDownPos [32] = "DOWN2";
+		m_upDownPos [38] = "START";
+
+		m_event [6] = 24;
+		m_event [11] = 18;
+		m_event [23] = 35;
+		m_event [28] = 1;
+		m_event [32] = 25;
+		m_event [38] = 0;
+
+		Debug.Log ("EVENT : " + m_upDownPos [6]);
 
 		SetDefaultPos ();
 
@@ -43,18 +62,29 @@ public class Gamecontroller : MonoBehaviour {
 			StartCoroutine (GoNextPos ());
 		if (m_state == "WaitRoll")
 			StartCoroutine (Roll ());
-		if (m_state == "Event")
-			Event();
 	}
 
-	private void Event(){
+	private IEnumerator Event(){
+		Debug.Log ("EVENT CHECK START");
+
 		m_state = "DoingEvent";
-		if (m_event [m_currentPos] >= 0) {
-			m_currentPos = m_event[m_currentPos];
-			StartCoroutine(GoNextPos());
-		} else {
+		if (m_upDownPos[m_currentPos] != null) {
+			yield return StartCoroutine(UpDownEvent());
+		} else if(m_event [m_currentPos] < 0){
 			m_eventStop = Mathf.Abs( m_event[m_currentPos]);
 		}
+		yield break;
+	}
+
+	private IEnumerator UpDownEvent(){
+		Debug.Log ("UP DOWN EVENT");
+		Debug.Log ("Current Pos : " + m_currentPos);
+		Debug.Log ("EVENT : " + m_upDownPos [m_currentPos]);
+
+		iTween.MoveTo (m_player, iTween.Hash("path", iTweenPath.GetPath(m_upDownPos[m_currentPos]), "time", 5));
+		m_currentPos = m_event [m_currentPos];
+
+		yield break;
 	}
 
 	private IEnumerator Roll(){
@@ -79,6 +109,9 @@ public class Gamecontroller : MonoBehaviour {
 
 		m_pointDice = m_dice.GetComponent<Dice> ().GetPointDice () + 1;
 
+	//	m_currentPos = 31;
+	//	m_pointDice = 1;
+
 		Debug.Log ("After : " + m_pointDice);
 
 		m_buttonRoll.GetComponent<Roll> ().SetClickDefualt();
@@ -89,6 +122,7 @@ public class Gamecontroller : MonoBehaviour {
 
 	private IEnumerator GoNextPos(){
 		m_state = "Moving";
+		Debug.Log (m_state);
 		for (int i = 1; i <= m_pointDice; i++) {
 			if(m_currentPos < 39)
 				m_currentPos ++;
@@ -97,9 +131,9 @@ public class Gamecontroller : MonoBehaviour {
 
 
 
-			Debug.Log (m_currentPos);
-			Debug.Log ("Curr Pos : " + currPos);
-			Debug.Log ("Next Pos : " + nextPos);
+	//		Debug.Log (m_currentPos);
+	//		Debug.Log ("Curr Pos : " + currPos);
+	//		Debug.Log ("Next Pos : " + nextPos);
 
 
 			while (!Equal( currPos.x, nextPos.x) || !Equal( currPos.y, nextPos.y)) {
@@ -133,13 +167,16 @@ public class Gamecontroller : MonoBehaviour {
 				}
 			
 				m_player.transform.position = currPos;
-				yield return new WaitForSeconds (0.001f);
+				yield return null;
 			}
 		}
+
+		yield return StartCoroutine(Event ());
 
 		Debug.Log ("WAIT FOR GO NEXT POS");
 
 		yield return new WaitForSeconds(0.5f);
+
 
 		m_state = "WaitRoll";
 
