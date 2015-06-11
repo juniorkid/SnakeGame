@@ -53,10 +53,10 @@ public class Dice : MonoBehaviour {
 
 			m_spriteRend.sprite = m_diceSprite[m_pointDice];
 			yield return new WaitForSeconds(m_speedRoll);
-			m_speedRoll += 0.05f;
+			m_speedRoll += 0.04f;
 		}
 
-		Debug.Log ("GET POINT DONE : " + m_pointDice);
+	//	Debug.Log ("GET POINT DONE : " + m_pointDice);
 		yield break;
 	}
 

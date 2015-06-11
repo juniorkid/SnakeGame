@@ -1,40 +1,68 @@
 ﻿using UnityEngine;
 using System.Collections;
 
+public enum GameStateID
+{
+	WaitRoll,
+	Rolling,
+	Move,
+	Moving,
+	DoingEvent,
+}
+
+public enum PlayerID
+{
+	Player1 = 0,
+	Player2,
+}
 public class Gamecontroller : MonoBehaviour {
 
-	private float[] m_posPlayerX;
-	private float[] m_posPlayerY;
-	private bool[] m_posPlayer;
+	private Vector3[] m_path1;
+	private Vector3[] m_path2;
+
+//	private float[] m_posPlayerX;
+//	private float[] m_posPlayerY;
+//	private bool[] m_posPlayer;
 	private int[] m_event;
 
-	private int m_eventStop;
+	private int[] m_eventStop;
 
 	private string[] m_upDownPos;
 
-	private int m_currentPos;
+	private int[] m_currentPos;
 	private int m_pointDice;
 
-	public GameObject m_player;
+	public GameObject[] m_player;
 
 	private string m_state;
 
 	public GameObject m_dice;
 
 	public GameObject m_buttonRoll;
+	private GameStateID m_stateID;
+	private PlayerID m_playerID;
 
+	private int m_currID;
 	// Use this for initialization
 	void Start () {
-		m_eventStop = 0;
 
-		m_state = "WaitRoll";
-		m_currentPos = 0;
-		m_posPlayerX = new float[40];
-		m_posPlayerY = new float[40];
-		m_posPlayer = new bool[40];
+
+		m_stateID = GameStateID.WaitRoll;
+		//m_state = "WaitRoll";
+
+		m_currentPos = new int[2];
+		m_eventStop = new int[2];
 		m_event = new int[40];
 		m_upDownPos = new string[40];
 
+		m_currID = (int)m_playerID;
+
+		m_currentPos[0] = 0;
+		m_currentPos[1] = 0;
+
+	/*	m_eventStop[0] = 0;
+		m_eventStop[1] = 0;
+		
 		m_upDownPos [6] = "UP1";
 		m_upDownPos [11] = "UP2";
 		m_upDownPos [23] = "UP3";
@@ -43,312 +71,338 @@ public class Gamecontroller : MonoBehaviour {
 		m_upDownPos [38] = "START";
 
 		m_event [6] = 24;
+		m_event [9] = -1;
 		m_event [11] = 18;
+		m_event [21] = -3;
 		m_event [23] = 35;
 		m_event [28] = 1;
 		m_event [32] = 25;
+		m_event [33] = -2;
 		m_event [38] = 0;
+*/
+//		SetDefaultPos ();
 
-		Debug.Log ("EVENT : " + m_upDownPos [6]);
+		m_path1 = iTweenPath.GetPath("PATH1");
+		m_path2 = iTweenPath.GetPath("PATH2");
 
-		SetDefaultPos ();
-
-		m_player.transform.position = new Vector3 ( m_posPlayerX[0], m_posPlayerY[0], -2);
+		m_player [0].transform.position = m_path1[0];
+		m_player [1].transform.position = m_path2[0];
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (m_state == "Move")
-			StartCoroutine (GoNextPos ());
-		if (m_state == "WaitRoll")
-			StartCoroutine (Roll ());
+		switch (m_stateID) {
+		case GameStateID.WaitRoll: 
+			StartCoroutine (Roll ()); break;
+		case GameStateID.Move: 
+			StartCoroutine (GoNextPos ()); break;
+		}
 	}
 
 	private IEnumerator Event(){
-		Debug.Log ("EVENT CHECK START");
+		int normalMode = 0;
 
-		m_state = "DoingEvent";
-		if (m_upDownPos[m_currentPos] != null) {
+		Debug.Log ("EVENT CHECK START");
+		m_stateID = GameStateID.DoingEvent;
+	//	m_state = "DoingEvent";
+		if (m_upDownPos[m_currentPos[m_currID]] != null) {
 			yield return StartCoroutine(UpDownEvent());
-		} else if(m_event [m_currentPos] < 0){
-			m_eventStop = Mathf.Abs( m_event[m_currentPos]);
+		} else if(m_event [m_currentPos[m_currID]] < normalMode){
+			Debug.Log ("STOP TURN");
+			m_eventStop[m_currID] = Mathf.Abs( m_event[m_currentPos[m_currID]]);
 		}
+
+		Debug.Log ("EVENT CHECK STOP");
 		yield break;
 	}
 
 	private IEnumerator UpDownEvent(){
 		Debug.Log ("UP DOWN EVENT");
-		Debug.Log ("Current Pos : " + m_currentPos);
-		Debug.Log ("EVENT : " + m_upDownPos [m_currentPos]);
+		Debug.Log ("Current Pos : " + m_currentPos[m_currID]);
+		Debug.Log ("EVENT : " + m_upDownPos [m_currentPos[m_currID]]);
 
-		iTween.MoveTo (m_player, iTween.Hash("path", iTweenPath.GetPath(m_upDownPos[m_currentPos]), "time", 5));
-		m_currentPos = m_event [m_currentPos];
+		iTween.MoveTo (m_player[m_currID], iTween.Hash("path", iTweenPath.GetPath(m_upDownPos[m_currentPos[m_currID]]), "time", 5));
+		m_currentPos[m_currID] = m_event [m_currentPos[m_currID]];
+
+		yield return new WaitForSeconds (2f);
 
 		yield break;
 	}
 
 	private IEnumerator Roll(){
+		int normalMode = 0;
+
+		Debug.Log ("WAIT Player : " + (m_currID + 1).ToString() + " ROLL");
+
 		bool hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick();
-		float m_timeRandom = Random.Range(4F, 7F);
+		float m_timeRandom = Random.Range(3F, 8F);
 
-		m_state = "Rolling";
+		m_stateID = GameStateID.Rolling;
+	//	m_state = "Rolling";
 
-		while(!hasClick){
-			hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick();
-			yield return null;
+		if (m_eventStop [m_currID] == normalMode) {
+			while (!hasClick) {
+				hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick ();
+				yield return null;
+			}
+
+			m_dice.GetComponent<Dice> ().StartRoll ();
+
+
+
+			yield return new WaitForSeconds (m_timeRandom);
+			m_dice.GetComponent<Dice> ().StopRoll ();
+
+		//	Debug.Log ("BEFORE : " + m_pointDice);
+
+			m_pointDice = m_dice.GetComponent<Dice> ().GetPointDice () + 1;
+
+			//	m_currentPos = 31;
+			//	m_pointDice = 1;
+
+		//	Debug.Log ("After : " + m_pointDice);
+
+			m_buttonRoll.GetComponent<Roll> ().SetClickDefualt ();
+
+			m_stateID = GameStateID.Move;
+			//m_state = "Move";
+
+		} else {
+			Debug.Log("Player : " + (m_currID + 1).ToString() + " STOP!! " ) ;
+			m_eventStop [m_currID] --;
+			ChangePlayerTurn ();
+
+			m_stateID = GameStateID.WaitRoll;
+			//m_state = "WaitRoll";
 		}
-
-		m_dice.GetComponent<Dice> ().StartRoll ();
-
-
-
-		yield return new WaitForSeconds (m_timeRandom);
-		m_dice.GetComponent<Dice> ().StopRoll ();
-
-		Debug.Log ("BEFORE : " + m_pointDice);
-
-		m_pointDice = m_dice.GetComponent<Dice> ().GetPointDice () + 1;
-
-	//	m_currentPos = 31;
-	//	m_pointDice = 1;
-
-		Debug.Log ("After : " + m_pointDice);
-
-		m_buttonRoll.GetComponent<Roll> ().SetClickDefualt();
-		m_state = "Move";
-
 		yield break;
 	}
 
 	private IEnumerator GoNextPos(){
-		m_state = "Moving";
-		Debug.Log (m_state);
+		float moveSpeed = 0.04f;
+		bool backward = false;
+		int maxNode = 39;
+		Vector3 nextPos;
+
+		m_stateID = GameStateID.Moving;
+		//m_state = "Moving";
+		Debug.Log (m_stateID);
 		for (int i = 1; i <= m_pointDice; i++) {
-			if(m_currentPos < 39)
-				m_currentPos ++;
-			Vector3 nextPos = new Vector3 (m_posPlayerX [m_currentPos], m_posPlayerY [m_currentPos], -2f);
-			Vector3 currPos = m_player.transform.position;
 
+			Debug.Log("CURRENT POSITION : " + m_currentPos[m_currID]);
 
+			if(m_currentPos[m_currID] >= maxNode)
+				backward = true;
+
+			if(backward){
+				m_currentPos[m_currID] --;
+			}
+			else{
+				m_currentPos[m_currID] ++;
+			}
+
+			if(m_playerID == PlayerID.Player1){
+				nextPos = m_path1[m_currentPos[m_currID]];
+			}
+			else {
+				nextPos = m_path2[m_currentPos[m_currID]];
+			}
+	
+
+			Vector3 currPos = m_player[m_currID].transform.position;
 
 	//		Debug.Log (m_currentPos);
 	//		Debug.Log ("Curr Pos : " + currPos);
 	//		Debug.Log ("Next Pos : " + nextPos);
 
-
-			while (!Equal( currPos.x, nextPos.x) || !Equal( currPos.y, nextPos.y)) {
-				if (!Equal (currPos.x, nextPos.x) && !Equal (currPos.y, nextPos.y)) {
+			iTween.MoveTo(m_player[m_currID], nextPos, 4f);
+			yield return new WaitForSeconds(1f);
+			/*
+			while (!Equal( (float)currPos.x, (float)nextPos.x) || !Equal( (float)currPos.y, (float)nextPos.y)) {
+				if (!Equal ((float)currPos.x, (float)nextPos.x) && !Equal ((float)currPos.y, (float)nextPos.y)) {
 					if (currPos.x > nextPos.x && currPos.y > nextPos.y) {
-						currPos.x -= 0.01f;
-						currPos.y -= 0.01f;
+						currPos.x -= moveSpeed;
+						currPos.y -= moveSpeed;
 					} else if (currPos.x < nextPos.x && currPos.y < nextPos.y) {
-						currPos.x += 0.01f;
-						currPos.y += 0.01f;
+						currPos.x += moveSpeed;
+						currPos.y += moveSpeed;
 					} else if (currPos.x > nextPos.x && currPos.y < nextPos.y) {
-						currPos.x -= 0.01f;
-						currPos.y += 0.01f;
+						currPos.x -= moveSpeed;
+						currPos.y += moveSpeed;
 					} else if (currPos.x < nextPos.x && currPos.y > nextPos.y) {
-						currPos.x += 0.01f;
-						currPos.y -= 0.01f;
+						currPos.x += moveSpeed;
+						currPos.y -= moveSpeed;
 					}
 			
-				} else if (!Equal (currPos.x, nextPos.x)) {
+				} else if (!Equal ((float)currPos.x, (float)nextPos.x)) {
 					if (currPos.x > nextPos.x) {
-						currPos.x -= 0.01f;
+						currPos.x -= moveSpeed;
 					} else {
-						currPos.x += 0.01f;
+						currPos.x += moveSpeed;
 					}
-				} else if (!Equal (currPos.y, nextPos.y)) {
+				} else if (!Equal ((float)currPos.y, (float)nextPos.y)) {
 					if (currPos.y > nextPos.y) {
-						currPos.y -= 0.01f;
+						currPos.y -= moveSpeed;
 					} else {
-						currPos.y += 0.01f;
+						currPos.y += moveSpeed;
 					}
 				}
 			
-				m_player.transform.position = currPos;
+				m_player[m_currID].transform.position = currPos;
 				yield return null;
-			}
+			}*/
 		}
 
 		yield return StartCoroutine(Event ());
 
-		Debug.Log ("WAIT FOR GO NEXT POS");
+		Debug.Log ("END TURN WAIT OTHER PLAYER");
 
 		yield return new WaitForSeconds(0.5f);
 
+		ChangePlayerTurn ();
 
-		m_state = "WaitRoll";
+		m_stateID = GameStateID.WaitRoll;
+		//m_state = "WaitRoll";
 
 		yield break;
 	}
 
 	private bool Equal(float x , float y){
-		if (x > y - 0.1 && x < y + 0.1) {
+		float error = 0.05f;
+
+		if (x > y - error && x < y + error) {
 			return true;
 		} else
 			return false;
 	}
 
-	private void SetDefaultPos(){
-		m_posPlayerX[0] = 5.76f;
-		m_posPlayerY[0] = -2.92f;
-		m_posPlayer[0] = true;
-		
-		m_posPlayerX[1] = 4.85f;
-		m_posPlayerY[1] = -2.92f;
-		m_posPlayer[1] = false;
-		
-		m_posPlayerX[2] = 4.13f;
-		m_posPlayerY[2] = -2.92f;
-		m_posPlayer[2] = false;
-		
-		m_posPlayerX[3] = 3.39f;
-		m_posPlayerY[3] = -2.92f;
-		m_posPlayer[3] = false;
-		
-		m_posPlayerX[4] = 2.69f;
-		m_posPlayerY[4] = -2.92f;
-		m_posPlayer[4] = false;
-		
-		m_posPlayerX[5] = 2.03f;
-		m_posPlayerY[5] = -2.92f;
-		m_posPlayer[5] = false;
-		
-		m_posPlayerX[6] = 1.31f;
-		m_posPlayerY[6] = -2.92f;
-		m_posPlayer[6] = false;
-		
-		m_posPlayerX[7] = 0.67f;
-		m_posPlayerY[7] = -2.92f;
-		m_posPlayer[7] = false;
-		
-		m_posPlayerX[8] = -0.19f;
-		m_posPlayerY[8] = -2.92f;
-		m_posPlayer[8] = false;
-		
-		m_posPlayerX[9] = -0.93f;
-		m_posPlayerY[9] = -2.92f;
-		m_posPlayer[9] = false;
-		
-		m_posPlayerX[10] = -1.65f;
-		m_posPlayerY[10] = -2.92f;
-		m_posPlayer[10] = false;
-		
-		m_posPlayerX[11] = -2.41f;
-		m_posPlayerY[11] = -2.92f;
-		m_posPlayer[11] = false;
-		
-		m_posPlayerX[12] = -2.99f;
-		m_posPlayerY[12] = -2.92f;
-		m_posPlayer[12] = false;
-		
-		m_posPlayerX[13] = -3.75f;
-		m_posPlayerY[13] = -2.92f;
-		m_posPlayer[13] = false;
-		
-		m_posPlayerX[14] = -4.63f;
-		m_posPlayerY[14] = -2.67f;
-		m_posPlayer[14] = false;
-		
-		m_posPlayerX[15] = -4.63f;
-		m_posPlayerY[15] = -1.83f;
-		m_posPlayer[15] = false;
-		
-		m_posPlayerX[16] = -4.12f;
-		m_posPlayerY[16] = -1.15f;
-		m_posPlayer[16] = false;
-		
-		m_posPlayerX[17] = -3.59f;
-		m_posPlayerY[17] = -0.97f;
-		m_posPlayer[17] = false;
-		
-		m_posPlayerX[18] = -3.03f;
-		m_posPlayerY[18] =  -0.97f;
-		m_posPlayer[18] = false;
-		
-		m_posPlayerX[19] = -2.41f;
-		m_posPlayerY[19] =  -0.97f;
-		m_posPlayer[19] = false;
-		
-		m_posPlayerX[20] = -1.77f;
-		m_posPlayerY[20] =  -0.97f;
-		m_posPlayer[20] = false;
-		
-		m_posPlayerX[21] = -1.26f;
-		m_posPlayerY[21] =  -0.97f;
-		m_posPlayer[21] = false;
-		
-		m_posPlayerX[22] = -0.52f;
-		m_posPlayerY[22] =  -0.97f;
-		m_posPlayer[22] = false;
-		
-		m_posPlayerX[23] = 0.2f;
-		m_posPlayerY[23] =  -0.97f;
-		m_posPlayer[23] = false;
-		
-		m_posPlayerX[24] = 0.96f;
-		m_posPlayerY[24] = -0.6f;
-		m_posPlayer[24] = false;
-		
-		m_posPlayerX[25] = 1.66f;
-		m_posPlayerY[25] = -0.6f;
-		m_posPlayer[25] = false;
-		
-		m_posPlayerX[26] = 2.36f;
-		m_posPlayerY[26] = -0.35f;
-		m_posPlayer[26] = false;
-		
-		m_posPlayerX[27] = 3.02f;
-		m_posPlayerY[27] = -0.35f;
-		m_posPlayer[27] = false;
-		
-		m_posPlayerX[28] = 3.78f;
-		m_posPlayerY[28] = 0.1f;
-		m_posPlayer[28] = false;
-		
-		m_posPlayerX[29] = 4.12f;
-		m_posPlayerY[29] = 0.84f;
-		m_posPlayer[29] = false;
-		
-		m_posPlayerX[30] = 4.12f;
-		m_posPlayerY[30] = 1.68f;
-		m_posPlayer[30] = false;
-		
-		m_posPlayerX[31] = 3.32f;
-		m_posPlayerY[31] = 2.26f;
-		m_posPlayer[31] = false;
-		
-		m_posPlayerX[32] = 2.5f;
-		m_posPlayerY[32] = 2.67f;
-		m_posPlayer[32] = false;
-		
-		m_posPlayerX[33] = 1.37f;
-		m_posPlayerY[33] = 2.67f;
-		m_posPlayer[33] = false;
-		
-		m_posPlayerX[34] = 0.51f;
-		m_posPlayerY[34] = 2.67f;
-		m_posPlayer[34] = false;
-		
-		m_posPlayerX[35] = -0.46f;
-		m_posPlayerY[35] = 2.67f;
-		m_posPlayer[35] = false;
-		
-		m_posPlayerX[36] = -1.51f;
-		m_posPlayerY[36] = 2.67f;
-		m_posPlayer[36] = false;
-		
-		m_posPlayerX[37] = -2.37f;
-		m_posPlayerY[37] = 2.67f;
-		m_posPlayer[37] = false;
-		
-		m_posPlayerX[38] = -3.34f;
-		m_posPlayerY[38] = 2.67f;
-		m_posPlayer[38] = false;
-		
-		m_posPlayerX[39] = -4.41f;
-		m_posPlayerY[39] = 2.67f;
-		m_posPlayer[39] = false;
+	private void ChangePlayerTurn(){
+		switch(m_playerID){
+			case PlayerID.Player1: m_playerID = PlayerID.Player2; Debug.Log("CHANGE To 2"); break;
+			case PlayerID.Player2: m_playerID = PlayerID.Player1; Debug.Log("CHANGE To 1");break;
+		}
+		m_currID = (int)m_playerID;
 	}
+
+	/*private void SetDefaultPos(){
+		m_posPlayerX[0] =  0.97f;
+		m_posPlayerY[0] = -3.1f;
+
+		m_posPlayerX[1] = -0.04f;
+		m_posPlayerY[1] = -3.1f;
+		
+		m_posPlayerX[2] = -0.795f;
+		m_posPlayerY[2] = -3.1f;
+		
+		m_posPlayerX[3] = -1.57f;
+		m_posPlayerY[3] = -3.1f;
+		
+		m_posPlayerX[4] = -2.34f;
+		m_posPlayerY[4] = -3.1f;
+		
+		m_posPlayerX[5] = -3.11f;
+		m_posPlayerY[5] = -3.1f;
+		
+		m_posPlayerX[6] = -3.88f;
+		m_posPlayerY[6] = -3.1f;
+		
+		m_posPlayerX[7] = -4.59f;
+		m_posPlayerY[7] = -3.1f;
+		
+		m_posPlayerX[8] = -5.13f;
+		m_posPlayerY[8] = -2.95f;
+
+		m_posPlayerX[9] = -5.15f;
+		m_posPlayerY[9] = -2.494f;
+		
+		m_posPlayerX[10] = -5.15f;
+		m_posPlayerY[10] = -2.163f;
+		
+		m_posPlayerX[11] = -4.99f;
+		m_posPlayerY[11] = -1.79f;
+	
+		m_posPlayerX[12] = -4.60f;
+		m_posPlayerY[12] = -1.41f;
+		
+		m_posPlayerX[13] = -3.92f;
+		m_posPlayerY[13] = -1.41f;
+		
+		m_posPlayerX[14] = -3.16f;
+		m_posPlayerY[14] = -1.41f;
+		
+		m_posPlayerX[15] = -2.4f;
+		m_posPlayerY[15] = -1.41f;
+		
+		m_posPlayerX[16] = -1.63f;
+		m_posPlayerY[16] = -1.41f;
+		
+		m_posPlayerX[17] = -0.78f;
+		m_posPlayerY[17] = -1.41f;
+		
+		m_posPlayerX[18] = -0.06f;
+		m_posPlayerY[18] = -1.05f;
+		
+		m_posPlayerX[19] = 0.2f;
+		m_posPlayerY[19] = -0.48f;
+
+		m_posPlayerX[20] = 0.2f;
+		m_posPlayerY[20] =  0.1f;
+		
+		m_posPlayerX[21] = -0.09f;
+		m_posPlayerY[21] =  0.65f;
+		
+		m_posPlayerX[22] = -0.73f;
+		m_posPlayerY[22] = 1.17f;
+		
+		m_posPlayerX[23] = -1.60f;
+		m_posPlayerY[23] =  1.17f;
+		
+		m_posPlayerX[24] = -2.38f;
+		m_posPlayerY[24] = 1.17f;
+		
+		m_posPlayerX[25] = -3.13f;
+		m_posPlayerY[25] = 1.17f;
+		
+		m_posPlayerX[26] = -3.89f;
+		m_posPlayerY[26] = 1.17f;
+		
+		m_posPlayerX[27] = -4.56f;
+		m_posPlayerY[27] = 1.17f;
+		
+		m_posPlayerX[28] = -4.92f;
+		m_posPlayerY[28] = 1.47f;
+		
+		m_posPlayerX[29] = -5.03f;
+		m_posPlayerY[29] = 1.81f;
+		
+		m_posPlayerX[30] = -5.03f;
+		m_posPlayerY[30] = 2.13f;
+		
+		m_posPlayerX[31] = -4.93f;
+		m_posPlayerY[31] = 2.49f;
+		
+		m_posPlayerX[32] = -4.48f;
+		m_posPlayerY[32] = 2.67f;
+		
+		m_posPlayerX[33] = -3.88f;
+		m_posPlayerY[33] = 2.67f;
+		
+		m_posPlayerX[34] = -3.10f;
+		m_posPlayerY[34] = 2.67f;
+		
+		m_posPlayerX[35] = -2.34f;
+		m_posPlayerY[35] = 2.67f;
+		
+		m_posPlayerX[36] = -1.56f;
+		m_posPlayerY[36] = 2.67f;
+		
+		m_posPlayerX[37] = -0.77f;
+		m_posPlayerY[37] = 2.67f;
+		
+		m_posPlayerX[38] = -0.01f;
+		m_posPlayerY[38] = 2.67f;
+		
+		m_posPlayerX[39] = 1.06f;
+		m_posPlayerY[39] = 2.67f;
+	}*/
 }
