@@ -17,8 +17,7 @@ public enum PlayerID
 }
 public class Gamecontroller : MonoBehaviour {
 
-	private Vector3[] m_path1;
-	private Vector3[] m_path2;
+	private Vector3[][] m_path;
 
 //	private float[] m_posPlayerX;
 //	private float[] m_posPlayerY;
@@ -49,7 +48,7 @@ public class Gamecontroller : MonoBehaviour {
 
 		m_stateID = GameStateID.WaitRoll;
 		//m_state = "WaitRoll";
-
+		m_path = new Vector3[2][];
 		m_currentPos = new int[2];
 		m_eventStop = new int[2];
 		m_event = new int[40];
@@ -60,33 +59,52 @@ public class Gamecontroller : MonoBehaviour {
 		m_currentPos[0] = 0;
 		m_currentPos[1] = 0;
 
-	/*	m_eventStop[0] = 0;
+		m_eventStop[0] = 0;
 		m_eventStop[1] = 0;
 		
-		m_upDownPos [6] = "UP1";
-		m_upDownPos [11] = "UP2";
-		m_upDownPos [23] = "UP3";
-		m_upDownPos [28] = "DOWN1";
-		m_upDownPos [32] = "DOWN2";
-		m_upDownPos [38] = "START";
+		m_upDownPos [3] = "UP1";
+		m_upDownPos [17] = "UP2";
+		m_upDownPos [26] = "DOWN1";
+		m_upDownPos [34] = "DOWN2";
+		m_upDownPos [38] = "DOWN3";
 
-		m_event [6] = 24;
-		m_event [9] = -1;
-		m_event [11] = 18;
-		m_event [21] = -3;
-		m_event [23] = 35;
-		m_event [28] = 1;
-		m_event [32] = 25;
-		m_event [33] = -2;
-		m_event [38] = 0;
-*/
-//		SetDefaultPos ();
+		m_upDownPos [5] = "START1";
+		m_upDownPos [10] = "START2";
+		m_upDownPos [16] = "START3";
+		m_upDownPos [22] = "START4";
+		m_upDownPos [32] = "START5";
+		m_upDownPos [37] = "START6";
 
-		m_path1 = iTweenPath.GetPath("PATH1");
-		m_path2 = iTweenPath.GetPath("PATH2");
+		m_event [3] = 15;
+		m_event [17] = 23;
+		m_event [26] = 12;
+		m_event [34] = 25;
+		m_event [38] = 22;
 
-		m_player [0].transform.position = m_path1[0];
-		m_player [1].transform.position = m_path2[0];
+		m_event [2] = -1;
+		m_event [7] = -2;
+		m_event [11] = -1;
+		m_event [14] = -2;
+		m_event [19] = -2;
+		m_event [24] = -3;
+		m_event [28] = -2;
+		m_event [31] = -1;
+		m_event [35] = -1;
+
+		m_event [5] = 0;
+		m_event [10] = 0;
+		m_event [16] = 0;
+		m_event [22] = 0;
+		m_event [32] = 0;
+		m_event [37] = 0;
+		
+		//		SetDefaultPos ();
+
+		m_path[0] = iTweenPath.GetPath("PATH1");
+		m_path[1] = iTweenPath.GetPath("PATH2");
+
+		m_player [0].transform.position = m_path[0][0];
+		m_player [1].transform.position = m_path[1][0];
 	}
 	
 	// Update is called once per frame
@@ -95,39 +113,45 @@ public class Gamecontroller : MonoBehaviour {
 		case GameStateID.WaitRoll: 
 			StartCoroutine (Roll ()); break;
 		case GameStateID.Move: 
-			StartCoroutine (GoNextPos ()); break;
+			StartCoroutine (PlayerMove ()); break;
 		}
 	}
 
 	private IEnumerator Event(){
 		int normalMode = 0;
+		int currPos;
+		int goPos;
+
+
+		currPos = m_player [m_currID].GetComponent<PlayerMovement> ().GetCurrentPos ();
+
+		goPos = m_event [currPos];
 
 		Debug.Log ("EVENT CHECK START");
 		m_stateID = GameStateID.DoingEvent;
 	//	m_state = "DoingEvent";
-		if (m_upDownPos[m_currentPos[m_currID]] != null) {
-			yield return StartCoroutine(UpDownEvent());
-		} else if(m_event [m_currentPos[m_currID]] < normalMode){
+		if(m_upDownPos[currPos] != null){
+			yield return StartCoroutine(m_player[m_currID].GetComponent<PlayerMovement>().DoUpDownEvent(goPos, m_path[m_currID][goPos]));
+		}
+		else if(m_event [currPos] < normalMode){
 			Debug.Log ("STOP TURN");
-			m_eventStop[m_currID] = Mathf.Abs( m_event[m_currentPos[m_currID]]);
+			Debug.Log ("CURRENT POSITION WHEN CHECK EVENT : " + currPos.ToString());
+			m_eventStop[m_currID] = Mathf.Abs( m_event[currPos]);
+			Debug.Log("EVENT STOP : " + m_eventStop[m_currID].ToString());
 		}
 
 		Debug.Log ("EVENT CHECK STOP");
 		yield break;
 	}
 
-	private IEnumerator UpDownEvent(){
-		Debug.Log ("UP DOWN EVENT");
-		Debug.Log ("Current Pos : " + m_currentPos[m_currID]);
-		Debug.Log ("EVENT : " + m_upDownPos [m_currentPos[m_currID]]);
+/*	private IEnumerator UpDownEvent(){
+		int currPos;
 
-		iTween.MoveTo (m_player[m_currID], iTween.Hash("path", iTweenPath.GetPath(m_upDownPos[m_currentPos[m_currID]]), "time", 5));
-		m_currentPos[m_currID] = m_event [m_currentPos[m_currID]];
-
-		yield return new WaitForSeconds (2f);
+		currPos = m_player [m_currID].GetComponent<PlayerMovement> ().GetCurrentPos ();
+		yield return StartCoroutine(m_player[m_currID].GetComponent<PlayerMovement>().DoUpDownEvent(m_upDownPos[currPos], m_event[currPos]));
 
 		yield break;
-	}
+	}*/
 
 	private IEnumerator Roll(){
 		int normalMode = 0;
@@ -178,81 +202,14 @@ public class Gamecontroller : MonoBehaviour {
 		yield break;
 	}
 
-	private IEnumerator GoNextPos(){
-		float moveSpeed = 0.04f;
-		bool backward = false;
-		int maxNode = 39;
-		Vector3 nextPos;
+	private IEnumerator PlayerMove(){
 
 		m_stateID = GameStateID.Moving;
 		//m_state = "Moving";
 		Debug.Log (m_stateID);
-		for (int i = 1; i <= m_pointDice; i++) {
 
-			Debug.Log("CURRENT POSITION : " + m_currentPos[m_currID]);
-
-			if(m_currentPos[m_currID] >= maxNode)
-				backward = true;
-
-			if(backward){
-				m_currentPos[m_currID] --;
-			}
-			else{
-				m_currentPos[m_currID] ++;
-			}
-
-			if(m_playerID == PlayerID.Player1){
-				nextPos = m_path1[m_currentPos[m_currID]];
-			}
-			else {
-				nextPos = m_path2[m_currentPos[m_currID]];
-			}
-	
-
-			Vector3 currPos = m_player[m_currID].transform.position;
-
-	//		Debug.Log (m_currentPos);
-	//		Debug.Log ("Curr Pos : " + currPos);
-	//		Debug.Log ("Next Pos : " + nextPos);
-
-			iTween.MoveTo(m_player[m_currID], nextPos, 4f);
-			yield return new WaitForSeconds(1f);
-			/*
-			while (!Equal( (float)currPos.x, (float)nextPos.x) || !Equal( (float)currPos.y, (float)nextPos.y)) {
-				if (!Equal ((float)currPos.x, (float)nextPos.x) && !Equal ((float)currPos.y, (float)nextPos.y)) {
-					if (currPos.x > nextPos.x && currPos.y > nextPos.y) {
-						currPos.x -= moveSpeed;
-						currPos.y -= moveSpeed;
-					} else if (currPos.x < nextPos.x && currPos.y < nextPos.y) {
-						currPos.x += moveSpeed;
-						currPos.y += moveSpeed;
-					} else if (currPos.x > nextPos.x && currPos.y < nextPos.y) {
-						currPos.x -= moveSpeed;
-						currPos.y += moveSpeed;
-					} else if (currPos.x < nextPos.x && currPos.y > nextPos.y) {
-						currPos.x += moveSpeed;
-						currPos.y -= moveSpeed;
-					}
-			
-				} else if (!Equal ((float)currPos.x, (float)nextPos.x)) {
-					if (currPos.x > nextPos.x) {
-						currPos.x -= moveSpeed;
-					} else {
-						currPos.x += moveSpeed;
-					}
-				} else if (!Equal ((float)currPos.y, (float)nextPos.y)) {
-					if (currPos.y > nextPos.y) {
-						currPos.y -= moveSpeed;
-					} else {
-						currPos.y += moveSpeed;
-					}
-				}
-			
-				m_player[m_currID].transform.position = currPos;
-				yield return null;
-			}*/
-		}
-
+		yield return StartCoroutine(m_player[m_currID].GetComponent<PlayerMovement>().GoNextPos( m_pointDice, m_path[m_currID]));
+		
 		yield return StartCoroutine(Event ());
 
 		Debug.Log ("END TURN WAIT OTHER PLAYER");

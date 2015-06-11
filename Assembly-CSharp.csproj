@@ -49,6 +49,7 @@
      <Compile Include="Assets\Pixelplacement\iTweenPath\iTweenPath.cs" />
      <Compile Include="Assets\Script\Dice.cs" />
      <Compile Include="Assets\Script\Gamecontroller.cs" />
+     <Compile Include="Assets\Script\PlayerMovement.cs" />
      <Compile Include="Assets\Script\Roll.cs" />
      <None Include="Assets\Plugins\Pixelplacement\iTween\ReadMe!\ReadMe!.txt" />
  <Reference Include="UnityEngine.UI">
