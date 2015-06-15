@@ -1,9 +1,20 @@
 fileFormatVersion: 2
 guid: ae697ac9d1e375a4dafca4673dfdbd4e
-timeCreated: 1433997701
+timeCreated: 1434010214
 licenseType: Free
 TextureImporter:
-  fileIDToRecycleName: {}
+  fileIDToRecycleName:
+    21300000: ladder_0
+    21300002: ladder_1
+    21300004: ladder_2
+    21300006: ladder_3
+    21300008: ladder_4
+    21300010: ladder_5
+    21300012: ladder_6
+    21300014: ladder_7
+    21300016: ladder_8
+    21300018: ladder_9
+    21300020: ladder_10
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -30,14 +41,14 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     filterMode: -1
-    aniso: -1
+    aniso: 16
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
   lightmap: 0
   rGBM: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -48,7 +59,117 @@ TextureImporter:
   textureType: 8
   buildTargetSettings: []
   spriteSheet:
-    sprites: []
+    sprites:
+    - name: ladder_0
+      rect:
+        serializedVersion: 2
+        x: 50
+        y: 544
+        width: 66
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_1
+      rect:
+        serializedVersion: 2
+        x: 274
+        y: 578
+        width: 48
+        height: 186
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_2
+      rect:
+        serializedVersion: 2
+        x: 516
+        y: 576
+        width: 93
+        height: 175
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_3
+      rect:
+        serializedVersion: 2
+        x: 725
+        y: 451
+        width: 120
+        height: 179
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_4
+      rect:
+        serializedVersion: 2
+        x: 916
+        y: 516
+        width: 115
+        height: 221
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_5
+      rect:
+        serializedVersion: 2
+        x: 259
+        y: 395
+        width: 66
+        height: 75
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_6
+      rect:
+        serializedVersion: 2
+        x: 1070
+        y: 289
+        width: 108
+        height: 156
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_7
+      rect:
+        serializedVersion: 2
+        x: 92
+        y: 173
+        width: 44
+        height: 213
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_8
+      rect:
+        serializedVersion: 2
+        x: 389
+        y: 98
+        width: 44
+        height: 193
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_9
+      rect:
+        serializedVersion: 2
+        x: 579
+        y: 178
+        width: 86
+        height: 173
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: ladder_10
+      rect:
+        serializedVersion: 2
+        x: 805
+        y: 150
+        width: 96
+        height: 159
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
   assetBundleName: 

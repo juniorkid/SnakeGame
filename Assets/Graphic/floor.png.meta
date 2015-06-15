@@ -1,6 +1,6 @@
 fileFormatVersion: 2
 guid: ba4e931541fbdc34da768c0eee94391b
-timeCreated: 1433997875
+timeCreated: 1434007174
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -74,8 +74,8 @@ TextureImporter:
         y: 563
         width: 137
         height: 141
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .496221393, y: .382519454}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_5
       rect:
@@ -84,8 +84,8 @@ TextureImporter:
         y: 368
         width: 104
         height: 63
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .552286267, y: .271522164}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_6
       rect:
@@ -94,8 +94,8 @@ TextureImporter:
         y: 363
         width: 111
         height: 102
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .528816998, y: .415328979}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_7
       rect:
@@ -104,8 +104,8 @@ TextureImporter:
         y: 362
         width: 95
         height: 109
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .691921532, y: .467719674}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_8
       rect:
@@ -134,8 +134,8 @@ TextureImporter:
         y: 358
         width: 98
         height: 105
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .308078498, y: .467719704}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_11
       rect:
@@ -144,8 +144,8 @@ TextureImporter:
         y: 340
         width: 113
         height: 102
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .471183002, y: .415329009}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_12
       rect:
@@ -154,8 +154,8 @@ TextureImporter:
         y: 333
         width: 105
         height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .447713703, y: .271522194}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_13
       rect:
@@ -164,8 +164,8 @@ TextureImporter:
         y: 233
         width: 105
         height: 62
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .518278241, y: .670254111}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_14
       rect:
@@ -174,8 +174,8 @@ TextureImporter:
         y: 187
         width: 111
         height: 99
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .570959985, y: .588596225}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_15
       rect:
@@ -184,8 +184,8 @@ TextureImporter:
         y: 179
         width: 97
         height: 106
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .692901611, y: .516548872}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_16
       rect:
@@ -214,18 +214,18 @@ TextureImporter:
         y: 167
         width: 99
         height: 106
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .307098389, y: .516548872}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_19
       rect:
         serializedVersion: 2
         x: 906
-        y: 159
+        y: 160
         width: 110
         height: 102
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .429040015, y: .588596225}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_20
       rect:
@@ -234,8 +234,8 @@ TextureImporter:
         y: 179
         width: 105
         height: 63
-      alignment: 0
-      pivot: {x: 0, y: 0}
+      alignment: 9
+      pivot: {x: .481721789, y: .670254111}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: floor_1
       rect:
@@ -244,8 +244,8 @@ TextureImporter:
         y: 569
         width: 121
         height: 171
-      alignment: 0
-      pivot: {x: .5, y: .5}
+      alignment: 9
+      pivot: {x: .241699725, y: .296389222}
       border: {x: 0, y: 0, z: 0, w: 0}
   spritePackingTag: 
   userData: 
