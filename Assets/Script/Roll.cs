@@ -7,7 +7,7 @@ public class Roll : MonoBehaviour {
 	
 	// Use this for initialization
 	void Start(){
-		m_hasClick = true;
+		m_hasClick = false;
 	}
 
 	void OnMouseDown() {

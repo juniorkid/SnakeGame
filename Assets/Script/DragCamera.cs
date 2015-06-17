@@ -31,10 +31,10 @@ public class DragCamera : MonoBehaviour {
 				posDrag = m_origin - m_diference;
 				if(posDrag.x < -19f)
 					posDrag.x = -17.33f;
-				else if(posDrag.x > 0)
-					posDrag.x = 0;
-				if(posDrag.y < -2.4f)
-					posDrag.y = -2.4f;
+				else if(posDrag.x > 1.42f)
+					posDrag.x = 1.42f;
+				if(posDrag.y < -3.128713f)
+					posDrag.y = -3.128713f;
 				else if(posDrag.y > m_lastPos.y)
 					posDrag.y = m_lastPos.y;
 

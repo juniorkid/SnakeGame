@@ -1,0 +1,231 @@
+fileFormatVersion: 2
+guid: 86e664f1ac4c1e343a89f0d931e7f1bf
+timeCreated: 1434448461
+licenseType: Free
+TextureImporter:
+  fileIDToRecycleName:
+    21300000: floor2_0
+    21300002: floor2_5
+    21300004: floor2_6
+    21300006: floor2_7
+    21300008: floor2_9
+    21300010: floor2_10
+    21300012: floor2_11
+    21300014: floor2_12
+    21300016: floor2_13
+    21300018: floor2_14
+    21300020: floor2_15
+    21300022: floor2_16
+    21300024: floor2_17
+    21300026: floor2_18
+    21300028: floor2_19
+    21300030: floor2_1
+  serializedVersion: 2
+  mipmaps:
+    mipMapMode: 0
+    enableMipMap: 1
+    linearTexture: 0
+    correctGamma: 0
+    fadeOut: 0
+    borderMipMap: 0
+    mipMapFadeDistanceStart: 1
+    mipMapFadeDistanceEnd: 3
+  bumpmap:
+    convertToNormalMap: 0
+    externalNormalMap: 0
+    heightScale: .25
+    normalMapFilter: 0
+  isReadable: 0
+  grayScaleToAlpha: 0
+  generateCubemap: 0
+  cubemapConvolution: 0
+  cubemapConvolutionSteps: 8
+  cubemapConvolutionExponent: 1.5
+  seamlessCubemap: 0
+  textureFormat: -1
+  maxTextureSize: 2048
+  textureSettings:
+    filterMode: -1
+    aniso: 16
+    mipBias: -1
+    wrapMode: 1
+  nPOTScale: 0
+  lightmap: 0
+  rGBM: 0
+  compressionQuality: 50
+  spriteMode: 2
+  spriteExtrude: 1
+  spriteMeshType: 1
+  alignment: 0
+  spritePivot: {x: .5, y: .5}
+  spriteBorder: {x: 0, y: 0, z: 0, w: 0}
+  spritePixelsToUnits: 100
+  alphaIsTransparency: 1
+  textureType: 8
+  buildTargetSettings: []
+  spriteSheet:
+    sprites:
+    - name: floor2_0
+      rect:
+        serializedVersion: 2
+        x: 234
+        y: 563
+        width: 136
+        height: 141
+      alignment: 9
+      pivot: {x: .496221393, y: .382519513}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_5
+      rect:
+        serializedVersion: 2
+        x: 158
+        y: 432
+        width: 110
+        height: 102
+      alignment: 9
+      pivot: {x: .528816998, y: .415329009}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_6
+      rect:
+        serializedVersion: 2
+        x: 315
+        y: 433
+        width: 96
+        height: 109
+      alignment: 9
+      pivot: {x: .691921473, y: .467719704}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_7
+      rect:
+        serializedVersion: 2
+        x: 475
+        y: 439
+        width: 71
+        height: 100
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_9
+      rect:
+        serializedVersion: 2
+        x: 803
+        y: 435
+        width: 98
+        height: 105
+      alignment: 9
+      pivot: {x: .308078498, y: .467719704}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_10
+      rect:
+        serializedVersion: 2
+        x: 935
+        y: 419
+        width: 113
+        height: 102
+      alignment: 9
+      pivot: {x: .471183002, y: .415329009}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_11
+      rect:
+        serializedVersion: 2
+        x: 1080
+        y: 420
+        width: 105
+        height: 63
+      alignment: 9
+      pivot: {x: .447713703, y: .271522194}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_12
+      rect:
+        serializedVersion: 2
+        x: 43
+        y: 337
+        width: 104
+        height: 63
+      alignment: 9
+      pivot: {x: .552286327, y: .271522194}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_13
+      rect:
+        serializedVersion: 2
+        x: 231
+        y: 296
+        width: 105
+        height: 61
+      alignment: 9
+      pivot: {x: .518278182, y: .670254111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_14
+      rect:
+        serializedVersion: 2
+        x: 638
+        y: 282
+        width: 105
+        height: 60
+      alignment: 9
+      pivot: {x: .481721789, y: .670254111}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_15
+      rect:
+        serializedVersion: 2
+        x: 33
+        y: 157
+        width: 111
+        height: 99
+      alignment: 9
+      pivot: {x: .570959985, y: .588596225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_16
+      rect:
+        serializedVersion: 2
+        x: 195
+        y: 141
+        width: 97
+        height: 106
+      alignment: 9
+      pivot: {x: .692901611, y: .516548872}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_17
+      rect:
+        serializedVersion: 2
+        x: 385
+        y: 134
+        width: 72
+        height: 101
+      alignment: 0
+      pivot: {x: .5, y: .5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_18
+      rect:
+        serializedVersion: 2
+        x: 810
+        y: 221
+        width: 111
+        height: 101
+      alignment: 9
+      pivot: {x: .429040015, y: .588596225}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_19
+      rect:
+        serializedVersion: 2
+        x: 973
+        y: 215
+        width: 98
+        height: 105
+      alignment: 9
+      pivot: {x: .307098389, y: .516548872}
+      border: {x: 0, y: 0, z: 0, w: 0}
+    - name: floor2_1
+      rect:
+        serializedVersion: 2
+        x: 696
+        y: 569
+        width: 122
+        height: 175
+      alignment: 9
+      pivot: {x: .241699696, y: .296389192}
+      border: {x: 0, y: 0, z: 0, w: 0}
+  spritePackingTag: 
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

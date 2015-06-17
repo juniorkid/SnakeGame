@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: ef153b4958e9be14a95212c43a0add6f
-timeCreated: 1434010495
+guid: 23fbf4edc56b4754485b8e7e00c472b1
+timeCreated: 1434450166
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
@@ -55,30 +55,30 @@ TextureImporter:
     - name: 580611_snake ladder_0
       rect:
         serializedVersion: 2
-        x: 2987
-        y: 1913
-        width: 267
-        height: 282
+        x: 3940
+        y: 1931
+        width: 199
+        height: 270
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: 580611_snake ladder_1
       rect:
         serializedVersion: 2
-        x: 3451
-        y: 1915
-        width: 275
-        height: 280
+        x: 2997
+        y: 1925
+        width: 199
+        height: 270
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}
     - name: 580611_snake ladder_2
       rect:
         serializedVersion: 2
-        x: 3935
-        y: 1913
-        width: 272
-        height: 282
+        x: 3459
+        y: 1925
+        width: 199
+        height: 270
       alignment: 0
       pivot: {x: .5, y: .5}
       border: {x: 0, y: 0, z: 0, w: 0}

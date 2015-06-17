@@ -65,7 +65,7 @@ public class Createfloor : MonoBehaviour {
 		m_numFloor = 1;
 		m_maxFloor = 100;
 
-		m_maxCircle = (int)Random.Range (2f, 5f);
+		m_maxCircle = (int)Random.Range (4f, 8f);
 	}
 	// Update is called once per frame
 	void Update () {
@@ -217,7 +217,7 @@ public class Createfloor : MonoBehaviour {
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
 		
-		m_lastFloorPos.x += 2.17f ;
+		m_lastFloorPos.x += 2.23f ;
 		m_lastFloorPos.y += 1.29f ;
 		floor = Instantiate (m_circleLeft[5], m_lastFloorPos, Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;	
@@ -254,7 +254,7 @@ public class Createfloor : MonoBehaviour {
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
 		
-		m_lastFloorPos.x += 2.11f ;
+		m_lastFloorPos.x += 2.15f ;
 		m_lastFloorPos.y += 1.36f ;
 		floor = Instantiate (m_circleRight[1], m_lastFloorPos, Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;		
@@ -268,7 +268,7 @@ public class Createfloor : MonoBehaviour {
 		m_numFloor++;
 		
 		m_lastFloorPos.x += 0.98f ;
-		m_lastFloorPos.y += 1.6f ;
+		m_lastFloorPos.y += 1.65f ;
 		floor = Instantiate (m_circleRight[2], m_lastFloorPos, Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
@@ -281,7 +281,7 @@ public class Createfloor : MonoBehaviour {
 		m_numFloor++;
 		
 		m_lastFloorPos.x -= 0.15f ;
-		m_lastFloorPos.y += 1.56f ;
+		m_lastFloorPos.y += 1.51f ;
 		floor = Instantiate (m_circleRight[3], m_lastFloorPos, Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();

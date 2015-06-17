@@ -9,7 +9,7 @@ public class MainCameraMove : MonoBehaviour {
 	public GameObject m_dice;
 	public GameObject m_button;
 
-	float m_moveSpeed = 4f;
+	float m_moveSpeed = 1f;
 
 	// Use this for initialization
 	void Start () {
@@ -40,7 +40,7 @@ public class MainCameraMove : MonoBehaviour {
 
 		Vector3 currPos;
 
-		yield return new WaitForSeconds (1f);
+	//	yield return new WaitForSeconds (1f);
 		
 		foreach(Vector3 pos in path){
 		//	Debug.Log (pos);
@@ -49,7 +49,7 @@ public class MainCameraMove : MonoBehaviour {
 			currPos.z = -10;
 			currPos.y += 1.47f;
 
-			iTween.MoveTo(gameObject, currPos, m_moveSpeed);
+			iTween.MoveTo(gameObject, currPos, m_moveSpeed + 2);
 
 			yield return new WaitForSeconds(.2f);
 		}
@@ -65,16 +65,24 @@ public class MainCameraMove : MonoBehaviour {
 		Debug.Log ("SET CAMERA : " + pos);
 
 		pos.z = -10;
-		pos.y += 1.47f;
+		pos.y += 0.47f;
+		pos.x += 0.47f;
 
 		iTween.MoveTo(gameObject, pos, m_moveSpeed);
 
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (0.1f);
+
+		Debug.Log ("SET POSITION");
 
 		yield break;
 	}
 
 	public void ShowDiceButton(){
+
+	///	yield return new WaitForSeconds (0.1f);
+
+		Debug.Log ("SHOW DICE AND BUTTON");
+
 		m_dice.SetActive (true);
 		m_button.SetActive (true);
 	}
