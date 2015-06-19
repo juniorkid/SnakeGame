@@ -9,7 +9,7 @@ public class MainCameraMove : MonoBehaviour {
 	public GameObject m_dice;
 	public GameObject m_button;
 
-	float m_moveSpeed = 1f;
+	float m_moveSpeed = 0.5f;
 
 	// Use this for initialization
 	void Start () {
@@ -57,7 +57,7 @@ public class MainCameraMove : MonoBehaviour {
 		yield break;	
 	}
 
-	public IEnumerator SetPosiotion(Vector3 pos){
+	public IEnumerator SetPosition(Vector3 pos){
 
 		//m_dice.SetActive (false);
 		m_button.SetActive (false);
@@ -70,7 +70,7 @@ public class MainCameraMove : MonoBehaviour {
 
 		iTween.MoveTo(gameObject, pos, m_moveSpeed);
 
-		yield return new WaitForSeconds (0.1f);
+		yield return new WaitForSeconds (0.5f);
 
 		Debug.Log ("SET POSITION");
 

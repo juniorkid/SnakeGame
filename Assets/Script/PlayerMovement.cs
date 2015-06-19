@@ -36,7 +36,7 @@ public class PlayerMovement : MonoBehaviour {
 			nextPos.z = -2;
 
 			iTween.MoveTo(gameObject, nextPos, m_moveSpeed);
-			yield return StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().SetPosiotion (nextPos));
+			yield return StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (nextPos));
 			yield return new WaitForSeconds(0.5f);
 			
 		}
@@ -58,6 +58,8 @@ public class PlayerMovement : MonoBehaviour {
 
 		for (int i = m_currentPos + upDown; i != posEvent + upDown; i+=upDown) {
 
+			Debug.Log("Pos : " + i);
+
 			goPos = path[i];
 			goPos.z = -2;
 
@@ -65,7 +67,9 @@ public class PlayerMovement : MonoBehaviour {
 
 //		gameObject.transform.position = goPos;
 
-			StartCoroutine (m_mainCamera.GetComponent<MainCameraMove> ().SetPosiotion (goPos));
+			StartCoroutine (m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (goPos));
+
+			yield return new WaitForSeconds(0.1f);
 		}
 
 		m_currentPos = posEvent ;

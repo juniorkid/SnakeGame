@@ -47,10 +47,13 @@
   </ItemGroup>
   <ItemGroup>
      <Compile Include="Assets\Script\CameraPlayer.cs" />
+     <Compile Include="Assets\Script\CardControl.cs" />
      <Compile Include="Assets\Script\CreateEvent.cs" />
      <Compile Include="Assets\Script\Createfloor.cs" />
      <Compile Include="Assets\Script\Dice.cs" />
      <Compile Include="Assets\Script\DragCamera.cs" />
+     <Compile Include="Assets\Script\FlipCard.cs" />
+     <Compile Include="Assets\Script\Floor.cs" />
      <Compile Include="Assets\Script\Gamecontroller.cs" />
      <Compile Include="Assets\Script\MainCameraMove.cs" />
      <Compile Include="Assets\Script\Mainmenu.cs" />

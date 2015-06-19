@@ -9,9 +9,15 @@ public class DragCamera : MonoBehaviour {
 	private bool m_drag=false;
 	private bool m_canDrag = false;
 
+	private float m_rightX;
+	private float m_leftX;
+	private float m_startY;
+
 	private Vector3 m_lastPos;
 
+
 	void Start () {
+		m_startY = -3.128713f;
 		m_resetCamera = Camera.main.transform.position;
 	}
 	void LateUpdate () {
@@ -29,12 +35,12 @@ public class DragCamera : MonoBehaviour {
 			}
 			if (m_drag == true) {
 				posDrag = m_origin - m_diference;
-				if(posDrag.x < -19f)
-					posDrag.x = -17.33f;
-				else if(posDrag.x > 1.42f)
-					posDrag.x = 1.42f;
-				if(posDrag.y < -3.128713f)
-					posDrag.y = -3.128713f;
+				if(posDrag.x < m_leftX)
+					posDrag.x = m_leftX + 2;
+				else if(posDrag.x > m_rightX)
+					posDrag.x = m_rightX;
+				if(posDrag.y < m_startY)
+					posDrag.y = m_startY;
 				else if(posDrag.y > m_lastPos.y)
 					posDrag.y = m_lastPos.y;
 
@@ -54,5 +60,10 @@ public class DragCamera : MonoBehaviour {
 
 	public void SetLastPos(Vector3 pos){
 		m_lastPos = pos;
+	}
+
+	public void SetX(float rX, float lX){
+		m_rightX = rX;
+		m_leftX = lX;
 	}
 }

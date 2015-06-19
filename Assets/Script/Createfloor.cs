@@ -30,11 +30,11 @@ public class Createfloor : MonoBehaviour {
 
 	public Vector3 m_lastFloorPos;
 
-	public int m_numFloor;
+	private int m_numFloor;
 	public int m_maxFloor;
 
-	public int m_numCircle;
-	public int m_maxCircle;
+	private int m_numCircle;
+	private int m_maxCircle;
 
 	public int m_lengthNormal;
 
@@ -46,11 +46,16 @@ public class Createfloor : MonoBehaviour {
 
 	public GameObject m_textNumFloor;
 
+	public float m_leftX = 0 ;
+	public float m_rightX = 0 ;
+
+	public bool m_createEnd;
+
 	// Use this for initialization
 	void Start () {
 		GameObject floor;
 		m_path = new List<Vector3> ();
-
+		m_createEnd = false;
 		m_numFloor = 0;
 
 		m_hasLeft = false;
@@ -63,39 +68,42 @@ public class Createfloor : MonoBehaviour {
 		m_floorStateID = FloorState.Normal;
 
 		m_numFloor = 1;
-		m_maxFloor = 100;
+	//	m_maxFloor = 20;
 
-		m_maxCircle = (int)Random.Range (4f, 8f);
+		m_maxCircle = m_maxFloor / 12;
 	}
 	// Update is called once per frame
 	void Update () {
 
 		if (m_numFloor < m_maxFloor) {
 
-			switch(m_floorStateID){
-				case FloorState.Normal : 
-					CreateNormalFloor();
-					break;
+			switch (m_floorStateID) {
+			case FloorState.Normal: 
+				CreateNormalFloor ();
+				break;
 
-				case FloorState.CLeft :
-					CreateCircleLeftFloor();
+			case FloorState.CLeft:
+				CreateCircleLeftFloor ();
 
-					break;
+				break;
 
-				case FloorState.CRight :
-					CreateCircleRightFloor();
+			case FloorState.CRight:
+				CreateCircleRightFloor ();
 					
-					break;
+				break;
 
-				case FloorState.End :
-					CreateEndFloor();
+			case FloorState.End:
+				CreateEndFloor ();
 
-					break;
+				break;
 
-				case FloorState.No :
+			case FloorState.No:
 					
-					break;
+				break;
 			}
+		} else if (m_numFloor == m_maxFloor && !m_createEnd) {
+			Debug.Log("WILL CREATE END");
+			CreateEndFloor ();
 		}
 	}
 
@@ -106,28 +114,29 @@ public class Createfloor : MonoBehaviour {
 		GameObject floor;
 		Vector3 numFloorPos;
 
-		rangeNFloor = (int)Random.Range (4f, 6f);
+		rangeNFloor = (int)Random.Range (3f, 8f);
 		if(!m_hasLeft){
 			m_lengthNormal = rangeNFloor;
-			space = -2.95f;
+			space = -3.05f;
 			posNum = -1.3f;
 			m_floorStateID = FloorState.CLeft;
 			m_hasLeft =true;
 		}
 		else {
-			if(m_lengthNormal < rangeNFloor)
-				rangeNFloor = m_lengthNormal;
-			space = 2.95f;
+	//		if(m_lengthNormal < rangeNFloor)
+	//			rangeNFloor = m_lengthNormal;
+			space = 3.05f;
 			posNum = +1.7f;
 			m_floorStateID = FloorState.CRight;
 			m_hasLeft =false;
 		}
 		
-		for(int i = 0 ; i < rangeNFloor ; i++){
+		for(int i = 0 ; i < rangeNFloor && m_numFloor < m_maxFloor ; i++){
 			m_lastFloorPos.x += space ;
 
 			floor = Instantiate (m_normalFloor[0], m_lastFloorPos, Quaternion.identity) as GameObject;
 			m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
+			floor.name = m_numFloor.ToString();
 
 			numFloorPos = m_lastFloorPos;
 
@@ -140,6 +149,8 @@ public class Createfloor : MonoBehaviour {
 			m_lastFloorPos = floor.transform.position;		
 			m_path.Add(m_lastFloorPos);
 			m_numFloor++;
+
+			FindX(floor.transform.position.x);
 		}
 		
 		if(m_numCircle == m_maxCircle){
@@ -153,9 +164,10 @@ public class Createfloor : MonoBehaviour {
 
 		m_numCircle ++;
 		
-		m_lastFloorPos.x -= 2.7f ;
+		m_lastFloorPos.x -= 2.8f ;
 		m_lastFloorPos.y += 0.19f ;
 		floor = Instantiate (m_circleLeft[0], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;		
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -165,10 +177,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x -= 2.11f ;
 		m_lastFloorPos.y += 1.33f ;
 		floor = Instantiate (m_circleLeft[1], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;		
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -178,10 +192,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
-		
+		FindX(floor.transform.position.x);
+
 		m_lastFloorPos.x -= 0.97f ;
 		m_lastFloorPos.y += 1.62f ;
 		floor = Instantiate (m_circleLeft[2], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -191,10 +207,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x += 0.11f ;
 		m_lastFloorPos.y += 1.54f ;
 		floor = Instantiate (m_circleLeft[3], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -203,10 +221,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x += 0.62f ;
 		m_lastFloorPos.y += 1.79f ;
 		floor = Instantiate (m_circleLeft[4], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -216,10 +236,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x += 2.23f ;
 		m_lastFloorPos.y += 1.29f ;
 		floor = Instantiate (m_circleLeft[5], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -229,6 +251,7 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.y += 0.31f;
 		m_lastFloorPos.x -= 0.24f;
@@ -241,9 +264,10 @@ public class Createfloor : MonoBehaviour {
 		GameObject floor;
 		m_numCircle ++;
 		
-		m_lastFloorPos.x += 2.75f ;
+		m_lastFloorPos.x += 2.85f ;
 		m_lastFloorPos.y += 0.17f ;
 		floor = Instantiate (m_circleRight[0], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -253,10 +277,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x += 2.15f ;
 		m_lastFloorPos.y += 1.36f ;
 		floor = Instantiate (m_circleRight[1], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;		
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -266,10 +292,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x += 0.98f ;
 		m_lastFloorPos.y += 1.65f ;
 		floor = Instantiate (m_circleRight[2], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -279,10 +307,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x -= 0.15f ;
 		m_lastFloorPos.y += 1.51f ;
 		floor = Instantiate (m_circleRight[3], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;	
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -291,10 +321,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x -= 0.64f ;
 		m_lastFloorPos.y += 1.82f ;
 		floor = Instantiate (m_circleRight[4], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;		
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -304,10 +336,12 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 		
 		m_lastFloorPos.x -= 2.34f ;
 		m_lastFloorPos.y += 1.22f ;
 		floor = Instantiate (m_circleRight[5], m_lastFloorPos, Quaternion.identity) as GameObject;
+		floor.name = m_numFloor.ToString();
 		m_lastFloorPos = floor.transform.position;		
 		m_textNumFloor.GetComponent<TextMesh>().text = m_numFloor.ToString();
 		numFloorPos = m_lastFloorPos;
@@ -317,6 +351,7 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, numFloorPos, Quaternion.identity);
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
+		FindX(floor.transform.position.x);
 
 		m_lastFloorPos.y += 0.25f;
 		m_lastFloorPos.x -= -0.2f;
@@ -325,18 +360,22 @@ public class Createfloor : MonoBehaviour {
 	}
 
 	private void CreateEndFloor(){
+		Debug.Log ("Create End Floor");
+
+		m_floorStateID = FloorState.No;
+
 		GameObject floor;
 		float space;
 
 		if(!m_hasLeft){
 			space = 4.32f ;
-			m_floorStateID = FloorState.CLeft;
-			m_hasLeft =true;
+		//	m_floorStateID = FloorState.CLeft;
+		//	m_hasLeft =true;
 		}
 		else {
 			space = -4.32f ;
-			m_floorStateID = FloorState.CRight;
-			m_hasLeft =false;
+		//	m_floorStateID = FloorState.CRight;
+		//	m_hasLeft =false;
 		}
 
 		m_lastFloorPos.x += space ;
@@ -345,8 +384,8 @@ public class Createfloor : MonoBehaviour {
 		m_lastFloorPos = floor.transform.position;		
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
-		
-		m_maxFloor = m_numFloor;
+		FindX(floor.transform.position.x);
+		m_createEnd = true;
 	}
 
 	public List<Vector3> GetPath(){
@@ -356,5 +395,20 @@ public class Createfloor : MonoBehaviour {
 	private void CreateNumFloor(Vector3 pos){
 
 	}
-	
+
+	private void FindX(float x){
+		if(m_leftX > x)
+			m_leftX = x;
+		else if(m_rightX < x)
+			m_rightX = x;
+	}
+
+	public float GetRightX(){
+		return m_rightX;
+	}
+
+	public float GetLeftX(){
+		return m_leftX;
+	}
+
 }
