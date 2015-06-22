@@ -24,49 +24,65 @@ public class CardControl : MonoBehaviour {
 
 	private int m_posTrap;
 
-	private 
+	private Transform[] m_allCard;
+
+	private static CardControl m_singleton;
+	public static CardControl Getsingleton(){
+		return m_singleton;
+	}
+
+	void Awake()
+	{
+		m_singleton = this;
+	}
+
 	// Use this for initialization
 	void Start () {
+
+		m_allCard = gameObject.GetComponentsInChildren <Transform>();
+
 		m_finishFlip = false;
 		m_finishTrap = false;
-		m_doingFlip = false;
-		m_doingTrap = false;
+		m_doingFlip = true;
+		m_doingTrap = true;
 
 		m_itemRestart = Instantiate(m_prefabRestart, new Vector3 ( 0, 0, -20), Quaternion.identity) as GameObject;
-
-		transform.position = new Vector3(0,0,-20);
+		ShowHideCard(false);
+	//	transform.position = new Vector3(0,0,-20);
 	}
 
 	public IEnumerator ControlCard(){
 
-		Vector3 defaulPos = new Vector3(0,0,-20f);
-		Vector3 showPos = Camera.main.transform.position;
+		ShowHideCard (true);
 
-		showPos.x += 2.05f;
-		showPos.y += 0.23f;
-		showPos.z = -4;
+	//	Vector3 defaulPos = new Vector3(0,0,-20f);
+//		Vector3 showPos = Camera.main.transform.position;
 
-		transform.position = showPos;
+	//	showPos.x += 2.05f;
+	//	showPos.y += 0.23f;
+	//	showPos.z = -4;
+
+//		transform.position = showPos;
 
 		m_doingFlip = false;
 
 		while (!m_finishFlip)
 			yield return null;
 
-		transform.position = defaulPos;
+		ShowHideCard(false);
 
+//		transform.position = defaulPos;
+		//gameObject.SetActive (false);
 		yield break;
 
 	}
 
-	public IEnumerator CardEvent(int[] StopUpDownEvent, bool[] eventCard, int maxNode, List<Vector3> path){
+	public IEnumerator CardEvent(int maxNode, List<Vector3> path){
 
 		Debug.Log ("CARD (CONTROL)" + m_card);
 
 		if (m_card == 1) {
 
-			m_StopUpDownEvent = StopUpDownEvent;
-			m_eventCard = eventCard;
 			m_maxNode = maxNode;
 
 			m_doingTrap = false;
@@ -107,7 +123,21 @@ public class CardControl : MonoBehaviour {
 			yield break;
 		}
 	}
-	
+
+	private void ShowHideCard(bool setCard){
+		int length;
+
+		length = m_allCard.Length;
+
+		for (int i = 1; i < length; i++)
+			m_allCard [i].gameObject.SetActive (setCard);
+	}
+
+	public void SetAllEvent(int[] StopUpDownEvent, bool[] eventCard){
+		m_StopUpDownEvent = StopUpDownEvent;
+		m_eventCard = eventCard;
+	}
+
 	public void SetfinishFlip(bool finishFlip){
 		m_finishFlip = finishFlip;
 	}
@@ -121,6 +151,8 @@ public class CardControl : MonoBehaviour {
 	}
 
 	public bool GetDoingFlip(){
+		Debug.Log ("DOING IN CONTROL + " + m_doingFlip);
+
 		return m_doingFlip;
 	}
 
@@ -145,7 +177,7 @@ public class CardControl : MonoBehaviour {
 	}
 
 	public bool CheckEvent(int pos){
-		if (m_StopUpDownEvent [pos] == 0 && m_eventCard [pos] == false)
+		if (m_StopUpDownEvent [pos] == 0 && m_eventCard [pos] == false )
 			return true;
 		else {
 			return false;

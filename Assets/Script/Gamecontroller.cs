@@ -109,6 +109,8 @@ public class Gamecontroller : MonoBehaviour {
 
 		m_eventCard = m_createFloor.GetComponent<CreateEvent> ().GetPosEventCard();
 
+		m_deckCard.GetComponent<CardControl> ().SetAllEvent (m_event, m_eventCard);
+
 		Vector3 startPos = m_path [0];
 
 		startPos.z = -2;
@@ -190,7 +192,7 @@ public class Gamecontroller : MonoBehaviour {
 				m_deckCard.GetComponent<CardControl> ().SetfinishTrap (false);
 				yield return StartCoroutine(m_deckCard.GetComponent<CardControl>().ControlCard());
 				m_mainCamera.GetComponent<DragCamera>().SetDrag(true);
-				yield return StartCoroutine(m_deckCard.GetComponent<CardControl>().CardEvent(m_event, m_eventCard, m_maxNode, m_path));
+				yield return StartCoroutine(m_deckCard.GetComponent<CardControl>().CardEvent(m_maxNode, m_path));
 
 				Debug.Log ("TEST : " + m_event[12]);
 

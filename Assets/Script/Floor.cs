@@ -11,15 +11,17 @@ public class Floor : MonoBehaviour {
 
 	// Use this for initialization
 	void OnMouseDown(){
-		bool doingTrap = m_deck.GetComponent<CardControl> ().GetDoingTrap ();
-		bool canTrap = m_deck.GetComponent<CardControl> ().CheckEvent (int.Parse (gameObject.name));
+		bool doingTrap = CardControl.Getsingleton().GetDoingTrap ();
+		bool canTrap = CardControl.Getsingleton().CheckEvent (int.Parse (gameObject.name));
+
+		Debug.Log ("Doing Trap : " + doingTrap);
 
 		if (!doingTrap && canTrap) {
 
 			Debug.Log("Floor" + gameObject.name);
 
-			m_deck.GetComponent<CardControl> ().SetTrap (int.Parse (gameObject.name));
-			m_deck.GetComponent<CardControl> ().SetfinishTrap (true);
+			CardControl.Getsingleton().SetTrap (int.Parse (gameObject.name));
+			CardControl.Getsingleton().SetfinishTrap (true);
 		}
 	}
 }

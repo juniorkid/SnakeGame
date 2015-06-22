@@ -11,12 +11,11 @@ public class FlipCard : MonoBehaviour {
 	private int m_eventCard;
 	private Sprite m_spriteBack;
 
-	private GameObject m_deck;
 
 	void Start(){
 
 		m_numCard = m_spriteFront.Length;
-		m_deck = GameObject.FindWithTag ("Deck");
+		//m_deck = GameObject.FindWithTag ("Deck");
 		m_animator = gameObject.GetComponent<Animator> ();
 		m_spriteRend = gameObject.GetComponent<SpriteRenderer> ();
 
@@ -28,7 +27,7 @@ public class FlipCard : MonoBehaviour {
 	// Use this for initialization
 	void OnMouseDown () {
 		Debug.Log ("CLICK CARD");
-		bool doingFlip = m_deck.GetComponent<CardControl> ().GetDoingFlip ();
+		bool doingFlip = CardControl.Getsingleton().GetDoingFlip (); //m_deck.GetComponent<CardControl> ().GetDoingFlip ();
 
 		if(!m_isFlip && !doingFlip)
 			StartCoroutine (Flip ());
@@ -42,7 +41,7 @@ public class FlipCard : MonoBehaviour {
 
 		random = (int)Random.Range (0f, m_numCard - 0.1f);
 
-		m_deck.GetComponent<CardControl> ().SetDoingFlip (true);
+		CardControl.Getsingleton().SetDoingFlip (true);
 
 		m_eventCard = random;
 
@@ -72,9 +71,9 @@ public class FlipCard : MonoBehaviour {
 
 		yield return new WaitForSeconds(2f);
 
-		m_deck.GetComponent<CardControl> ().SetfinishFlip (true);
+		CardControl.Getsingleton().SetfinishFlip (true);
 
-		m_deck.GetComponent<CardControl> ().Card (1);
+		CardControl.Getsingleton().Card (1);
 
 		m_spriteRend.sprite = m_spriteBack;
 
