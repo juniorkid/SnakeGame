@@ -16,17 +16,12 @@ public class CreateEvent : MonoBehaviour {
 	public GameObject[] m_ForwardDown;
 	public GameObject m_deck;
 
+	public int m_noEvent = 0;
+
 	public int m_lastPos;
 
-	// Use this for initialization
-	void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
 
+	// Use to create all Event
 	public void CreateAllEvent(List<Vector3> path, int[] eventAll, bool[] eventCard){
 		m_event = eventAll;
 		m_eventCard = eventCard;
@@ -42,17 +37,27 @@ public class CreateEvent : MonoBehaviour {
 
 			Debug.Log ("max node : " + maxNode);
 
+			// Random position to create event
 			posEvent = (int)Random.Range(1f, (float)(maxNode - 1));
 
-			if(m_event[posEvent] == 0){
+			// Check that position don't have event
+			if(m_event[posEvent] == m_noEvent){
+
+				// Random stop event
 				int ranStop = (int)Random.Range (0f, 2.9f);
+
+				// Set stop event
 				switch(ranStop){
 					case 0:	m_event[posEvent] = -1; break;
 					case 1: m_event[posEvent] = -2; break;	
 					case 2: m_event[posEvent] = -3; break;
 				}
+
+				// Set position to create stop event
 				pos = path[posEvent];
 				pos.z = 0;
+
+				// Create object stop event
 				Instantiate (m_stop[ranStop], pos, Quaternion.identity);
 			}
 			else {
@@ -62,18 +67,19 @@ public class CreateEvent : MonoBehaviour {
 
 		// Create event UP DOWN
 
+		// Set start position of UP DOWN event 
 		int posUpDown = (int)(maxNode/6f);
-		posEvent = 0;
 
 		for(int i = 0 ; i < m_maxEventFB ;i++) {
 			Debug.Log ("Create EVENT FB : " + i.ToString());
-			
-			if(m_event[posUpDown] == 0){
+
+			// Check that position don't have event
+			if(m_event[posUpDown] == m_noEvent){
 				int ranStop = (int)Random.Range (1f, 11.9f);
 
-				//Check for don't go back start and go over win
+				//Check for don't create if go back start and go over win
 
-				if(posUpDown - ranStop + 5 >= 0 && (posEvent + ranStop <= maxNode || ranStop > 5)){
+				if(posUpDown - ranStop + 5 >= 0 && (posUpDown + ranStop <= maxNode || ranStop > 5)){
 
 					Debug.Log("Create Pos");
 
@@ -95,11 +101,12 @@ public class CreateEvent : MonoBehaviour {
 					case 11: m_event[posUpDown] = posUpDown - 6; break;
 					}
 
+					// Set position and create event
 					pos = path[posUpDown];
 					pos.z = 0;
 					Instantiate (m_ForwardDown[ranStop], pos, Quaternion.identity);
 
-					// Distance between Event
+					// Set Distance between Event
 					posUpDown += (int)Random.Range((maxNode/6f),(maxNode/5f));
 				}
 				else{
@@ -116,17 +123,22 @@ public class CreateEvent : MonoBehaviour {
 		for(int i = 0 ; i < m_maxEventCard ;i++) {
 			
 			Debug.Log ("max node : " + maxNode);
-			
+
+			// Random position to create event
+
 			posEvent = (int)Random.Range(1f, (float)(maxNode - 1));
 
 			Debug.Log("EVENT CARD : " + m_eventCard[posEvent]);
 
-			if(m_eventCard[posEvent] == false && m_event[posEvent] == 0){
+			// Check that position doesn't have event
+
+			if(m_eventCard[posEvent] == false && m_event[posEvent] == m_noEvent){
 
 				Debug.Log ("Create EVENT Card : " + i.ToString());
 
 				m_eventCard[posEvent] = true;
 
+				// Create event at this position
 				pos = path[posEvent];
 				pos.z = 0;
 				Instantiate (m_deck, pos, Quaternion.identity);
@@ -138,9 +150,13 @@ public class CreateEvent : MonoBehaviour {
 
 	}
 
+	// Return event Stop , Up Down
+
 	public int[] GetEvent(){
 		return m_event;
 	}
+
+	// Return card event
 
 	public bool[] GetPosEventCard(){
 		return m_eventCard;

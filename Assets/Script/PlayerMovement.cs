@@ -7,7 +7,8 @@ public class PlayerMovement : MonoBehaviour {
 	private int m_currentPos;
 	public Camera m_mainCamera;
 	float m_moveSpeed = 1f;
-	// Use this for initialization
+
+	// Use to go next position by pointDice
 	public IEnumerator GoNextPos(int pointDice, List<Vector3> path, int maxNode){
 
 		bool backward = false;
@@ -16,7 +17,9 @@ public class PlayerMovement : MonoBehaviour {
 		for (int i = 1; i <= pointDice; i++) {
 			
 			Debug.Log("CURRENT POSITION : " + m_currentPos);
-			
+
+			// Check if walk over win floor 
+
 			if(m_currentPos >= maxNode)
 				backward = true;
 			
@@ -35,49 +38,60 @@ public class PlayerMovement : MonoBehaviour {
 
 			nextPos.z = -2;
 
+			// Move to next position
+
 			iTween.MoveTo(gameObject, nextPos, m_moveSpeed);
+
+			// Move camera follow player
 			yield return StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (nextPos));
-			yield return new WaitForSeconds(0.5f);
-			
+
+			// Delay for wait camera
+			yield return new WaitForSeconds(0.5f);	
 		}
 		
 		yield break;
 	}
 
-	public IEnumerator DoUpDownEvent(int posEvent, List<Vector3> path){
+	// Go any posion 
+	public IEnumerator GoAnyPos(int pos, List<Vector3> path){
 		Debug.Log ("UP DOWN EVENT");
 		Debug.Log ("Current Pos : " + m_currentPos);
 
 		Vector3 goPos;
 		int upDown;
 
-		if (posEvent < m_currentPos)
+		// Check that posiotion before or after current position
+		if (pos < m_currentPos)
 			upDown = -1;
 		else
 			upDown = 1;
 
-		for (int i = m_currentPos + upDown; i != posEvent + upDown; i+=upDown) {
+		for (int i = m_currentPos + upDown; i != pos + upDown; i+=upDown) {
 
 			Debug.Log("Pos : " + i);
 
 			goPos = path[i];
 			goPos.z = -2;
 
+			// Move to next position
+
 			iTween.MoveTo (gameObject, goPos, m_moveSpeed);
 
-//		gameObject.transform.position = goPos;
+			// Move camera follow player
 
 			StartCoroutine (m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (goPos));
 
 			yield return new WaitForSeconds(0.1f);
 		}
 
-		m_currentPos = posEvent ;
+		m_currentPos = pos ;
 		
 		yield return new WaitForSeconds (0.5f);
 		
 		yield break;
 	}
+
+	// Get current position
 
 	public int GetCurrentPos(){
 		return m_currentPos;

@@ -46,7 +46,6 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\Script\CameraPlayer.cs" />
      <Compile Include="Assets\Script\CardControl.cs" />
      <Compile Include="Assets\Script\CreateEvent.cs" />
      <Compile Include="Assets\Script\Createfloor.cs" />

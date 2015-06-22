@@ -3,8 +3,6 @@ using System.Collections;
 
 public class Dice : MonoBehaviour {
 
-	//public GameObject m_buttonRoll;
-
 	private float m_timeRandom;
 
 	private float m_speedRoll;
@@ -27,23 +25,30 @@ public class Dice : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
+
+		// Check to Start roll dice
 		if (m_startRoll) {
 			StartCoroutine (Rolling ());
 		}
 	}
 
+	// Use to set state for roll
 	public void StartRoll(){
 		m_startRoll = true;
 		m_stopRoll = false;
 	}
 
+	// Use to set state for stop roll
 	public void StopRoll(){
 		m_stopRoll = true;
 	}
 
+	// Rolling dice
 	private IEnumerator Rolling(){
 		m_startRoll = false;
 		m_speedRoll = 0.01f;
+
+		// Roll dice until m_stopRoll equal true
 		while (!m_stopRoll) {
 	//		Debug.Log ("Roll : " + m_pointDice);
 			m_pointDice ++;
@@ -51,8 +56,11 @@ public class Dice : MonoBehaviour {
 				m_pointDice = 0;
 			}
 
+			// Change sprite follow point dice
 			m_spriteRend.sprite = m_diceSprite[m_pointDice];
 			yield return new WaitForSeconds(m_speedRoll);
+
+			// Decrease speed random roll
 			m_speedRoll += 0.04f;
 		}
 
@@ -60,6 +68,7 @@ public class Dice : MonoBehaviour {
 		yield break;
 	}
 
+	// Get point dice
 	public int GetPointDice(){
 		return m_pointDice;
 	}

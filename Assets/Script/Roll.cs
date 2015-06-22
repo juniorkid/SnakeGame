@@ -17,10 +17,11 @@ public class Roll : MonoBehaviour {
 		}
 	}
 
+	// Set player can click roll
 	public void SetClickDefualt(){
 		m_hasClick = false;
 	}
-
+	
 	public bool GetClick(){
 		return m_hasClick;
 	}

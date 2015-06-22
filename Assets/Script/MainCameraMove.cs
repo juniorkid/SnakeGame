@@ -19,7 +19,10 @@ public class MainCameraMove : MonoBehaviour {
 	void Update () {
 	}
 
+	// Set camera to Start Position
 	public IEnumerator FindStartPos(){
+
+		// Set to hide dice and button roll
 		m_dice.SetActive (false);
 		m_button.SetActive (false);
 
@@ -34,7 +37,10 @@ public class MainCameraMove : MonoBehaviour {
 		transform.position = pos;
 	}
 
+	// Move camera along path at start game
 	public IEnumerator MoveCameraFollowPath(List<Vector3> path){
+
+		// Set to hide dice and button roll
 		m_dice.SetActive (false);
 		m_button.SetActive (false);
 
@@ -49,6 +55,7 @@ public class MainCameraMove : MonoBehaviour {
 			currPos.z = -10;
 			currPos.y += 1.47f;
 
+			// Move camera to position
 			iTween.MoveTo(gameObject, currPos, m_moveSpeed + 2);
 
 			yield return new WaitForSeconds(.2f);
@@ -57,9 +64,14 @@ public class MainCameraMove : MonoBehaviour {
 		yield break;	
 	}
 
+	// Move camera to player position when player move
 	public IEnumerator SetPosition(Vector3 pos){
 
+		// Set can't drag between move camera
+		gameObject.GetComponent<DragCamera>().SetDrag(false);
 		//m_dice.SetActive (false);
+
+		// Hide button
 		m_button.SetActive (false);
 
 		Debug.Log ("SET CAMERA : " + pos);
@@ -68,15 +80,22 @@ public class MainCameraMove : MonoBehaviour {
 		pos.y += 0.47f;
 		pos.x += 0.47f;
 
+		// Move to position
+
 		iTween.MoveTo(gameObject, pos, m_moveSpeed);
+
+		// Delay wait camera move
 
 		yield return new WaitForSeconds (0.5f);
 
 		Debug.Log ("SET POSITION");
 
+		gameObject.GetComponent<DragCamera>().SetDrag(true);
+
 		yield break;
 	}
 
+	// Show dice and button
 	public void ShowDiceButton(){
 
 	///	yield return new WaitForSeconds (0.1f);
