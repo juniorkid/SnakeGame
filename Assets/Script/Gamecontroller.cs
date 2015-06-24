@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -21,22 +21,25 @@ public class Gamecontroller : MonoBehaviour {
 
 	private int[] m_event; // Tell what player will do
 
-	private bool[] m_eventCard;
+	private bool[] m_isEventCard;
 
 	private int[] m_eventStop;	// Keep turn that each player will stop
 	
 	private int m_pointDice;
 
-	public GameObject[] m_player;
+	public PlayerMovement[] m_playerMove;
 
 	private string m_state;
 
-	public GameObject m_dice;
+	public Dice m_dice;
 
-	public GameObject m_buttonRoll;
+	public Roll m_buttonRoll;
 	private GameStateID m_stateID;
 
-	public GameObject m_createFloor;
+	public Createfloor m_createFloor;
+	public CreateEvent m_createEvent;
+
+	private DragCamera m_dragCamera;
 
 	public int m_numPlayer;
 
@@ -44,7 +47,9 @@ public class Gamecontroller : MonoBehaviour {
 
 	private int m_maxNode;
 
-	public GameObject m_deckCard;
+	public CardControl m_cardControl;
+
+	private MainCameraMove m_mainCameraMove;
 
 	// Use this for initialization
 	void Start () {
@@ -65,9 +70,12 @@ public class Gamecontroller : MonoBehaviour {
 
 		// Initial value for event Stop and enable player
 		for (int i = 0; i < m_numPlayer; i++) {
-			m_player[i].SetActive(true);
+			m_playerMove[i].gameObject.SetActive(true);
 			m_eventStop [i] = 0;
 		}
+
+		m_mainCameraMove = m_mainCamera.GetComponent<MainCameraMove> ();
+		m_dragCamera = m_mainCamera.GetComponent<DragCamera> ();
 	}
 	
 	// Update is called once per frame
@@ -85,9 +93,9 @@ public class Gamecontroller : MonoBehaviour {
 
 	// Move camera along path at start game
 	private IEnumerator MoveCamera(List<Vector3> path){
-		yield return StartCoroutine (m_mainCamera.GetComponent<MainCameraMove> ().FindStartPos());
+		yield return StartCoroutine (m_mainCameraMove.FindStartPos());
 
-		yield return StartCoroutine (m_mainCamera.GetComponent<MainCameraMove> ().MoveCameraFollowPath(path));
+		yield return StartCoroutine (m_mainCameraMove.MoveCameraFollowPath(path));
 	}
 
 	// Create path and Get path
@@ -101,23 +109,23 @@ public class Gamecontroller : MonoBehaviour {
 		yield return new WaitForSeconds (1f);
 
 		// Get path
-		m_path = m_createFloor.GetComponent<Createfloor> ().GetPath ();
+		m_path = m_createFloor.GetPath ();
 
 		m_maxNode = m_path.Count;
 
 		// Create array for get all event
 		m_event = new int[m_path.Count];
-		m_eventCard = new bool[m_path.Count];	
-		m_createFloor.GetComponent<CreateEvent> ().CreateAllEvent (m_path, m_event, m_eventCard);
+		m_isEventCard = new bool[m_path.Count];	
+		m_createEvent.CreateAllEvent (m_path, m_event, m_isEventCard);
 
 		// Set event card
-		m_deckCard.GetComponent<CardControl> ().SetAllEvent (m_event, m_eventCard);
+		m_cardControl.SetAllEvent (m_event, m_isEventCard);
 
 		// Set player to start position
 		Vector3 startPos = m_path [0];
 		startPos.z = -2;
 		for (int i = 0; i < m_numPlayer; i++) {
-			m_player [i].transform.position = startPos;
+			m_playerMove [i].transform.position = startPos;
 		}
 
 		// Delay for wait set player
@@ -129,16 +137,16 @@ public class Gamecontroller : MonoBehaviour {
 		yield return StartCoroutine (MoveCamera (m_path));
 
 		// Set limit drag camera
-		m_mainCamera.GetComponent<DragCamera> ().SetLastPos (m_path[m_path.Count - 1]);
-		float rX = m_createFloor.GetComponent<Createfloor> ().GetRightX ();
-		float lX = m_createFloor.GetComponent<Createfloor> ().GetLeftX ();
-		m_mainCamera.GetComponent<DragCamera> ().SetX (rX,lX);
+		m_dragCamera.SetLastPos (m_path[m_path.Count - 1]);
+		float rX = m_createFloor.GetRightX ();
+		float lX = m_createFloor.GetLeftX ();
+		m_dragCamera.SetX (rX,lX);
 
 		// Set player can drag
-		m_mainCamera.GetComponent<DragCamera> ().SetDrag (true);
+		m_dragCamera.SetIsDrag (true);
 
 
-	//	StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().ShowDiceButton ());
+	//	StartCoroutine( m_mainCameraMove.ShowDiceButton ());
 
 		// Change state to wait player roll
 		m_stateID = GameStateID.WaitRoll;
@@ -151,15 +159,15 @@ public class Gamecontroller : MonoBehaviour {
 		int goPos;
 
 		// initial value event check
-		bool checkEvent = true;
+		bool isEvent = true;
 
 		Debug.Log ("EVENT CHECK START");
 		m_stateID = GameStateID.DoingEvent;
 
 		// Do event until that position don't have event
-		while(checkEvent){
+		while(isEvent){
 			// Set current position and next position
-			currPos = m_player [m_currID].GetComponent<PlayerMovement> ().GetCurrentPos ();
+			currPos = m_playerMove [m_currID].GetCurrentPos ();
 			goPos = m_event [currPos];
 				
 			// Check for do UP DOWN And Trap restart EVENT
@@ -191,7 +199,7 @@ public class Gamecontroller : MonoBehaviour {
 				}
 
 				// Move player to position
-				yield return StartCoroutine(m_player[m_currID].GetComponent<PlayerMovement>().GoAnyPos(goPos, m_path));
+				yield return StartCoroutine(m_playerMove[m_currID].GoAnyPos(goPos, m_path));
 			}
 			// Do stop event 
 			else if(m_event [currPos] < normalMode){
@@ -200,24 +208,24 @@ public class Gamecontroller : MonoBehaviour {
 				// Set turn that player will stop
 				m_eventStop[m_currID] = Mathf.Abs( m_event[currPos]);
 				Debug.Log("EVENT STOP : " + m_eventStop[m_currID].ToString());
-				checkEvent = false;
+				isEvent = false;
 			}
 			// Do card event
-			else if(m_eventCard[currPos]){
-				m_deckCard.GetComponent<CardControl> ().SetfinishFlip (false);
-				m_deckCard.GetComponent<CardControl> ().SetfinishTrap (false);
+			else if(m_isEventCard[currPos]){
+				m_cardControl.SetfinishFlip (false);
+				m_cardControl.SetfinishTrap (false);
 				// Call card control
-				yield return StartCoroutine(m_deckCard.GetComponent<CardControl>().ControlCard());
-				m_mainCamera.GetComponent<DragCamera>().SetDrag(true);
+				yield return StartCoroutine(m_cardControl.ControlCard());
+				m_dragCamera.SetIsDrag(true);
 				// Call card event
-				yield return StartCoroutine(m_deckCard.GetComponent<CardControl>().CardEvent(m_maxNode, m_path));
+				yield return StartCoroutine(m_cardControl.CardEvent(m_maxNode, m_path));
 
 				Debug.Log ("TEST : " + m_event[12]);
 
-				checkEvent = false;
+				isEvent = false;
 			}
 			else
-				checkEvent = false;
+				isEvent = false;
 		}
 
 		Debug.Log ("EVENT CHECK STOP");
@@ -226,32 +234,37 @@ public class Gamecontroller : MonoBehaviour {
 
 	// Roll State
 	private IEnumerator Roll(){
+		Debug.Log ("ROLL");
+
 		int normalMode = 0;
 		
 		m_stateID = GameStateID.Rolling;
 
 		// Set button can click
-		m_buttonRoll.GetComponent<Roll> ().SetClickDefualt ();
+		m_buttonRoll.SetClickDefualt ();
 
 		// Delay wait for set button
 		yield return new WaitForSeconds (0.5f);
 
 		// Move camera to player
-		yield return StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (m_player[m_currID].transform.position));
+		yield return StartCoroutine( m_mainCameraMove.SetPosition (m_playerMove[m_currID].transform.position));
+
+		// Delay wait camera move
+		yield return new WaitForSeconds (0.5f);
 
 		// Check event stop turn that player have
 		if (m_eventStop [m_currID] == normalMode) {
 
 			// Show button and dice
-			m_mainCamera.GetComponent<MainCameraMove> ().ShowDiceButton ();
+			m_mainCameraMove.ShowDiceButton ();
 			
 			Debug.Log ("WAIT Player : " + (m_currID + 1).ToString() + " ROLL");
 
 			// Set can drag
-			m_mainCamera.GetComponent<DragCamera> ().SetDrag (true);
+			m_dragCamera.SetIsDrag (true);
 
 			// Get value button
-			bool hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick();
+			bool isClick = m_buttonRoll.GetClick();
 
 //			Debug.Log (hasClick);
 
@@ -259,30 +272,30 @@ public class Gamecontroller : MonoBehaviour {
 			float m_timeRandom = Random.Range(3F, 8F);
 
 			// Wait unitl player click button
-			while (!hasClick) {
-				hasClick = m_buttonRoll.GetComponent<Roll> ().GetClick ();
+			while (!isClick) {
+				isClick = m_buttonRoll.GetClick ();
 				yield return null;
 			}
 
 			// Move camera to player and wait until this done
-			yield return StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (m_player[m_currID].transform.position));
+			yield return StartCoroutine( m_mainCameraMove.SetPosition (m_playerMove[m_currID].transform.position));
 
 			// Start roll dice
-			m_dice.GetComponent<Dice> ().StartRoll ();
+			m_dice.StartRoll ();
 
 			// Set can't drag
-			m_mainCamera.GetComponent<DragCamera> ().SetDrag (false);
+			m_dragCamera.SetIsDrag (false);
 
 			// Wait for roll dice
 			yield return new WaitForSeconds (m_timeRandom);
-			m_dice.GetComponent<Dice> ().StopRoll ();
+			m_dice.StopRoll ();
 			
-		//	m_mainCamera.GetComponent<DragCamera> ().SetDrag (true);
+		//	m_dragCamera.SetDrag (true);
 
 		//	Debug.Log ("BEFORE : " + m_pointDice);
 
 			// Get poice dice
-			m_pointDice = m_dice.GetComponent<Dice> ().GetPointDice () + 1;
+			m_pointDice = m_dice.GetPointDice () + 1;
 
 			//	m_currentPos = 31;
 			//	m_pointDice = 1;
@@ -311,12 +324,12 @@ public class Gamecontroller : MonoBehaviour {
 	private IEnumerator PlayerMove(){
 
 		m_stateID = GameStateID.Moving;
-	//	m_mainCamera.GetComponent<DragCamera> ().SetDrag (false);
+	//	m_dragCamera.SetDrag (false);
 		//m_state = "Moving";
 		Debug.Log (m_stateID);
 
 		// Wait player move
-		yield return StartCoroutine(m_player[m_currID].GetComponent<PlayerMovement>().GoNextPos( m_pointDice, m_path, m_maxNode));
+		yield return StartCoroutine(m_playerMove[m_currID].GoNextPos( m_pointDice, m_path, m_maxNode));
 
 		// Wait check event
 		yield return StartCoroutine(Event ());
@@ -332,7 +345,7 @@ public class Gamecontroller : MonoBehaviour {
 		// Change State
 		m_stateID = GameStateID.WaitRoll;
 
-		//m_mainCamera.GetComponent<DragCamera> ().SetDrag (true);
+		//m_dragCamera.SetDrag (true);
 		yield break;
 	}
 

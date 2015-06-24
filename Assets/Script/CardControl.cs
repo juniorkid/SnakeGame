@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -6,26 +6,29 @@ public class CardControl : MonoBehaviour {
 
 	// Use to check for start flip card
 
-	private bool m_finishFlip;
-	private bool m_canFlip;
+	private bool m_isFinishFlip;
+	private bool m_isCanFlip;
 
 	// Use to check for start trap
 
-	private bool m_finishTrap;
-	private bool m_doingTrap;
+	private bool m_isFinishTrap;
+	private bool m_isDoingTrap;
 
 	public Camera m_mainCamera;
 
-	private bool[] m_eventCard;
+	private bool[] m_isEventCard;
 
 	private int[] m_StopUpDownEvent;
 
 	public GameObject m_prefabRestart;
 	private GameObject m_itemRestart;
+	
+	public TextMesh m_textMesh;
+	private GameObject m_textObj;
 
 	// Type Card
 
-	private int m_card;
+	private int m_cardNum;
 
 	// Position of trap
 
@@ -50,53 +53,71 @@ public class CardControl : MonoBehaviour {
 		m_allCard = gameObject.GetComponentsInChildren <Transform>();
 
 		// Set default value
-		m_finishFlip = false;
-		m_finishTrap = false;
-		m_canFlip = false;
-		m_doingTrap = true;
+		m_isFinishFlip = false;
+		m_isFinishTrap = false;
+		m_isCanFlip = false;
+		m_isDoingTrap = true;
 
 		// Create item Restart
 		m_itemRestart = Instantiate(m_prefabRestart, new Vector3 ( 0, 0, -20), Quaternion.identity) as GameObject;
 
 		// Hide Card
 		ShowHideCard(false);
-	//	transform.position = new Vector3(0,0,-20);
+
+		// Hide Text 
+		m_textMesh.gameObject.SetActive(false);
+
 	}
 
 	// Use to show card for player choose
 	public IEnumerator ControlCard(){
 
+		// Set Can't drag when wait flip
+		m_mainCamera.GetComponent<DragCamera>().SetIsDrag(false);
+
 		// Show Card
 		ShowHideCard (true);
 	
 		// Set for card can flap 
-		m_canFlip = true;
+		m_isCanFlip = true;
 
 		// Wait Flip card 
-		while (!m_finishFlip)
+		while (!m_isFinishFlip)
 			yield return null;
 
 		// Hide Card
 		ShowHideCard(false);
+
+		// Set can drag
+		m_mainCamera.GetComponent<DragCamera>().SetIsDrag(true);
 	
 		yield break;
 
 	}
 
 	public IEnumerator CardEvent(int maxNode, List<Vector3> path){
-	
+
 		// Check if card is restart item
-		if (m_card == 1) {
+		if (m_cardNum == 1) {
 
 			// Set for can Trap on path
-			m_doingTrap = false;
+			m_isDoingTrap = false;
+
+			// Set Choose position to trap text
+			Vector3 pos = Camera.main.transform.position;
+			pos.y += 2;
+
+			// Show text Choose
+			m_textMesh.gameObject.SetActive(true);
 
 			// Wait player trap on path
-			while (!m_finishTrap)
+			while (!m_isFinishTrap)
 				yield return null;
 
+			m_textMesh.gameObject.SetActive(false);
+
 			// Set for can't trap on path
-			m_doingTrap = true;
+			m_isDoingTrap = true;
 
 			// Set value to tell where have event restart
 			m_StopUpDownEvent [m_posTrap] = maxNode;
@@ -109,84 +130,77 @@ public class CardControl : MonoBehaviour {
 			m_itemRestart.transform.localScale = new Vector3(1.3f, 1.3f, 1);
 
 			// move camera to postion that set trap
-			StartCoroutine(	m_mainCamera.GetComponent<MainCameraMove>().SetPosition(path[m_posTrap]));
-
-			float delay;
-
-			// Delay for wait move camera finish
-
-			delay = 1f;
-
-			yield return new WaitForSeconds(delay);
+			yield return StartCoroutine(	m_mainCamera.GetComponent<MainCameraMove>().SetPosition(path[m_posTrap]));
 
 			// Set can drag camera when animation running
-			m_mainCamera.GetComponent<DragCamera>().SetDrag(false);
+			m_mainCamera.GetComponent<DragCamera>().SetIsDrag(false);
 
 			// Run animation that show trap set
 			m_itemRestart.GetComponent<Animator>().SetTrigger("Appear");
 
+			float delay;
 
 			// Delay wait animation finish
-			delay = m_itemRestart.GetComponent<Animator>().GetCurrentAnimatorStateInfo (0).length;
-			yield return new WaitForSeconds(delay + 2f);
+			delay = m_itemRestart.GetComponent<Animator>().GetCurrentAnimatorStateInfo (0).length + 1f;
+			yield return new WaitForSeconds(delay );
 
 			// Set item restart position for hide it
 			posItem.z = -20;
 			m_itemRestart.transform.position = posItem;
 
-			m_mainCamera.GetComponent<DragCamera>().SetDrag(false);
+			m_mainCamera.GetComponent<DragCamera>().SetIsDrag(false);
 
 			yield break;
 		}
 	}
 
 	// Show hide all card
-	private void ShowHideCard(bool setCard){
+	private void ShowHideCard(bool isSetCard){
 		int length;
 
 		length = m_allCard.Length;
 
 		for (int i = 1; i < length; i++)
-			m_allCard [i].gameObject.SetActive (setCard);
+			m_allCard [i].gameObject.SetActive (isSetCard);
 	}
 
 
 	// Get all event from game control
-	public void SetAllEvent(int[] StopUpDownEvent, bool[] eventCard){
+	public void SetAllEvent(int[] StopUpDownEvent, bool[] isEventCard){
 		m_StopUpDownEvent = StopUpDownEvent;
-		m_eventCard = eventCard;
+		m_isEventCard = isEventCard;
 	}
 
 	// Set finish  flip
-	public void SetfinishFlip(bool finishFlip){
-		m_finishFlip = finishFlip;
+	public void SetfinishFlip(bool isFinishFlip){
+		m_isFinishFlip = isFinishFlip;
 	}
 
 	// Set finish trap
-	public void SetfinishTrap(bool finishTrap){
-		m_finishTrap = finishTrap;
+	public void SetfinishTrap(bool isFinishTrap){
+		m_isFinishTrap = isFinishTrap;
 	}
 
 	// Get finish flip
 	public bool Getfinish(){
-		return m_finishFlip;
+		return m_isFinishFlip;
 	}
 
 	// Get value for tell can flip
 	public bool GetCanFlip(){
-		Debug.Log ("DOING IN CONTROL + " + m_canFlip);
+		Debug.Log ("DOING IN CONTROL + " + m_isCanFlip);
 
-		return m_canFlip;
+		return m_isCanFlip;
 	}
 
 	// Set value for tell can flip
-	public void SetCanFlip(bool canFlip){
-		m_canFlip = canFlip;
+	public void SetCanFlip(bool isCanFlip){
+		m_isCanFlip = isCanFlip;
 	}
 
 	// Get value for tell trap is doing
 	public bool GetDoingTrap(){
-		return m_doingTrap;
+		return m_isDoingTrap;
 	}
 
 	// Set position for trap
@@ -195,18 +209,18 @@ public class CardControl : MonoBehaviour {
 	}
 
 	// Get type of card
-	public void Card(int card){
-		m_card = card;
+	public void SetCard(int cardNum){
+		m_cardNum = cardNum;
 	}
 
 	// Return type of card
 	public int GetCard(){
-		return m_card;
+		return m_cardNum;
 	}
 
 	// Check that postion don't have event
 	public bool CheckEvent(int pos){
-		if (m_StopUpDownEvent [pos] == 0 && m_eventCard [pos] == false )
+		if (m_StopUpDownEvent [pos] == 0 && m_isEventCard [pos] == false )
 			return true;
 		else {
 			return false;

@@ -7,8 +7,8 @@ public class Dice : MonoBehaviour {
 
 	private float m_speedRoll;
 
-	public bool m_startRoll;
-	public bool m_stopRoll;
+	public bool m_isStartRoll;
+	public bool m_isStopRoll;
 
 	public Sprite[] m_diceSprite;
 
@@ -17,9 +17,9 @@ public class Dice : MonoBehaviour {
 	private SpriteRenderer m_spriteRend;
 
 	void Start(){
-		m_startRoll = false;
+		m_isStartRoll = false;
 		m_speedRoll = 0.01f;
-		m_stopRoll = true;
+		m_isStopRoll = true;
 		m_spriteRend = gameObject.GetComponent<SpriteRenderer> ();
 	}
 
@@ -27,29 +27,29 @@ public class Dice : MonoBehaviour {
 	void Update () {
 
 		// Check to Start roll dice
-		if (m_startRoll) {
+		if (m_isStartRoll) {
 			StartCoroutine (Rolling ());
 		}
 	}
 
 	// Use to set state for roll
 	public void StartRoll(){
-		m_startRoll = true;
-		m_stopRoll = false;
+		m_isStartRoll = true;
+		m_isStopRoll = false;
 	}
 
 	// Use to set state for stop roll
 	public void StopRoll(){
-		m_stopRoll = true;
+		m_isStopRoll = true;
 	}
 
 	// Rolling dice
 	private IEnumerator Rolling(){
-		m_startRoll = false;
+		m_isStartRoll = false;
 		m_speedRoll = 0.01f;
 
 		// Roll dice until m_stopRoll equal true
-		while (!m_stopRoll) {
+		while (!m_isStopRoll) {
 	//		Debug.Log ("Roll : " + m_pointDice);
 			m_pointDice ++;
 			if(m_pointDice > 5){

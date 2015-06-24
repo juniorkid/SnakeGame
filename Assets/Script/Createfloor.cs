@@ -40,25 +40,22 @@ public class Createfloor : MonoBehaviour {
 	private string[] m_upDownPos;
 
 	public GameObject[] m_stop;
-
-	public GameObject m_textPrefab;
+	
 	public TextMesh m_textNumFloor;
 
 	public float m_leftX = 0 ;
 	public float m_rightX = 0 ;
 
-	public bool m_createEnd;
+	public bool m_isCreateEnd;
 
 	// Use this for initialization
 	void Start () {
 
 		GameObject floor;
 
-		m_textNumFloor = m_textPrefab.GetComponent<TextMesh> ();
-
 		// Initialize List for keep path
 		m_path = new List<Vector3> ();
-		m_createEnd = false;
+		m_isCreateEnd = false;
 		m_numFloor = 0;
 
 		// Set initial direction that create floor
@@ -70,6 +67,10 @@ public class Createfloor : MonoBehaviour {
 		floor = Instantiate (m_startFloor, new Vector3 (0.95f, -3.38f, 2), Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;
 		m_path.Add (m_lastFloorPos);
+
+		// Set right X and left X
+		m_rightX = 0.95f;
+		m_leftX = 0.95f;
 
 		// initial state that use to create each floor
 
@@ -111,7 +112,7 @@ public class Createfloor : MonoBehaviour {
 					
 				break;
 			}
-		} else if (m_numFloor == m_maxFloor && !m_createEnd) {
+		} else if (m_numFloor == m_maxFloor && !m_isCreateEnd) {
 			Debug.Log("WILL CREATE END");
 			CreateEndFloor ();
 		}
@@ -451,7 +452,7 @@ public class Createfloor : MonoBehaviour {
 		m_path.Add(m_lastFloorPos);
 		m_numFloor++;
 		FindX(floor.transform.position.x);
-		m_createEnd = true;
+		m_isCreateEnd = true;
 	}
 
 	// Get all path

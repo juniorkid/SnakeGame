@@ -42,6 +42,9 @@ public class PlayerMovement : MonoBehaviour {
 
 			iTween.MoveTo(gameObject, nextPos, m_moveSpeed);
 
+			// Delay for wait player move
+		//	yield return new WaitForSeconds(0.1f);	
+
 			// Move camera follow player
 			yield return StartCoroutine( m_mainCamera.GetComponent<MainCameraMove> ().SetPosition (nextPos));
 

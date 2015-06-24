@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -9,10 +9,13 @@ public class MainCameraMove : MonoBehaviour {
 	public GameObject m_dice;
 	public GameObject m_button;
 
-	float m_moveSpeed = 0.5f;
+	private DragCamera m_dragCamera;
+
+	float m_moveSpeed = 1f;
 
 	// Use this for initialization
-	void Start () {
+	void Start () { 
+		m_dragCamera = gameObject.GetComponent<DragCamera> ();
 	}
 	
 	// Update is called once per frame
@@ -68,7 +71,7 @@ public class MainCameraMove : MonoBehaviour {
 	public IEnumerator SetPosition(Vector3 pos){
 
 		// Set can't drag between move camera
-		gameObject.GetComponent<DragCamera>().SetDrag(false);
+		m_dragCamera.SetIsDrag(false);
 		//m_dice.SetActive (false);
 
 		// Hide button
@@ -77,8 +80,8 @@ public class MainCameraMove : MonoBehaviour {
 		Debug.Log ("SET CAMERA : " + pos);
 
 		pos.z = -10;
-		pos.y += 0.47f;
-		pos.x += 0.47f;
+	//	pos.y += 0.47f;
+	//	pos.x += 0.47f;
 
 		// Move to position
 
@@ -90,7 +93,7 @@ public class MainCameraMove : MonoBehaviour {
 
 		Debug.Log ("SET POSITION");
 
-		gameObject.GetComponent<DragCamera>().SetDrag(true);
+		m_dragCamera.SetIsDrag(true);
 
 		yield break;
 	}

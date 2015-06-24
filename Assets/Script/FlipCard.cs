@@ -10,7 +10,7 @@ public class FlipCard : MonoBehaviour {
 	private int m_numCard;
 	private int m_eventCard;
 	private Sprite m_spriteBack;
-
+	private CardControl m_cardControl;
 
 	void Start(){
 
@@ -21,6 +21,9 @@ public class FlipCard : MonoBehaviour {
 		m_animator = gameObject.GetComponent<Animator> ();
 		// Get its sprite component
 		m_spriteRend = gameObject.GetComponent<SpriteRenderer> ();
+
+		// Get Cardcontrol
+		m_cardControl = CardControl.Getsingleton ();
 
 		// Set Back card sprite
 		m_spriteBack = m_spriteRend.sprite;
@@ -34,10 +37,10 @@ public class FlipCard : MonoBehaviour {
 
 //		Debug.Log ("CLICK CARD");
 		// Get boolean to check for flip
-		bool canFlip = CardControl.Getsingleton().GetCanFlip (); //m_deck.GetComponent<CardControl> ().GetDoingFlip ();
+		bool isCanFlip = m_cardControl.GetCanFlip (); //m_deck.GetComponent<CardControl> ().GetDoingFlip ();
 
 		// Check for flip 
-		if(!m_isFlip && canFlip)
+		if(!m_isFlip && isCanFlip)
 			StartCoroutine (Flip ());
 	}
 
@@ -52,7 +55,7 @@ public class FlipCard : MonoBehaviour {
 		random = (int)Random.Range (0f, m_numCard - 0.1f);
 
 		// Set other card can't flip
-		CardControl.Getsingleton().SetCanFlip (false);
+		m_cardControl.SetCanFlip (false);
 
 		// Set type event card
 		m_eventCard = random;
@@ -83,10 +86,10 @@ public class FlipCard : MonoBehaviour {
 		yield return new WaitForSeconds(delay);
 
 		// Set boolean to tell finish flip
-		CardControl.Getsingleton().SetfinishFlip (true);
+		m_cardControl.SetfinishFlip (true);
 
 		// Set event card number
-		CardControl.Getsingleton().Card (1);
+		m_cardControl.SetCard (1);
 	
 		// Change card to back
 		m_spriteRend.sprite = m_spriteBack;

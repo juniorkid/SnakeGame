@@ -10,7 +10,7 @@ public class CreateEvent : MonoBehaviour {
 
 	private int[] m_event;
 
-	private bool[] m_eventCard;
+	private bool[] m_isEventCard;
 
 	public GameObject[] m_stop;
 	public GameObject[] m_ForwardDown;
@@ -22,9 +22,9 @@ public class CreateEvent : MonoBehaviour {
 
 
 	// Use to create all Event
-	public void CreateAllEvent(List<Vector3> path, int[] eventAll, bool[] eventCard){
+	public void CreateAllEvent(List<Vector3> path, int[] eventAll, bool[] isEventCard){
 		m_event = eventAll;
-		m_eventCard = eventCard;
+		m_isEventCard = isEventCard;
 		int maxNode = path.Count;
 
 		Debug.Log (maxNode);
@@ -128,15 +128,15 @@ public class CreateEvent : MonoBehaviour {
 
 			posEvent = (int)Random.Range(1f, (float)(maxNode - 1));
 
-			Debug.Log("EVENT CARD : " + m_eventCard[posEvent]);
+			Debug.Log("EVENT CARD : " + m_isEventCard[posEvent]);
 
 			// Check that position doesn't have event
 
-			if(m_eventCard[posEvent] == false && m_event[posEvent] == m_noEvent){
+			if(m_isEventCard[posEvent] == false && m_event[posEvent] == m_noEvent){
 
 				Debug.Log ("Create EVENT Card : " + i.ToString());
 
-				m_eventCard[posEvent] = true;
+				m_isEventCard[posEvent] = true;
 
 				// Create event at this position
 				pos = path[posEvent];
@@ -159,6 +159,6 @@ public class CreateEvent : MonoBehaviour {
 	// Return card event
 
 	public bool[] GetPosEventCard(){
-		return m_eventCard;
+		return m_isEventCard;
 	}
 }
