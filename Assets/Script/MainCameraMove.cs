@@ -41,7 +41,7 @@ public class MainCameraMove : MonoBehaviour {
 	}
 
 	// Move camera along path at start game
-	public IEnumerator MoveCameraFollowPath(List<Vector3> path){
+	public IEnumerator MoveCameraFollowPath(List<GameObject> path){
 
 		// Set to hide dice and button roll
 		m_dice.SetActive (false);
@@ -51,10 +51,10 @@ public class MainCameraMove : MonoBehaviour {
 
 	//	yield return new WaitForSeconds (1f);
 		
-		foreach(Vector3 pos in path){
+		foreach(GameObject pos in path){
 		//	Debug.Log (pos);
 
-			currPos = pos;
+			currPos = pos.transform.position;
 			currPos.z = -10;
 			currPos.y += 1.47f;
 
