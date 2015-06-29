@@ -1,19 +1,20 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\UpDownEvent.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Script\ResetEvent.cs">
     <Files>
-      <File FileName="Assets\Script\FloorProperties.cs" Line="42" Column="34" />
-      <File FileName="Assets\Script\CardControl.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\TimeBombCard.cs" Line="8" Column="26" />
+      <File FileName="Assets\Script\FloorProperties.cs" Line="50" Column="5" />
+      <File FileName="Assets\Script\CardControl.cs" Line="149" Column="22" />
       <File FileName="Assets\Script\ResetEvent.cs" Line="28" Column="39" />
       <File FileName="Assets\Script\CardEvent.cs" Line="17" Column="40" />
       <File FileName="Assets\Script\CardProp.cs" Line="14" Column="23" />
-      <File FileName="Assets\Script\RestartCard.cs" Line="36" Column="25" />
+      <File FileName="Assets\Script\RestartCard.cs" Line="18" Column="33" />
       <File FileName="Assets\Script\EventClass.cs" Line="9" Column="26" />
-      <File FileName="Assets\Script\UpDownEvent.cs" Line="9" Column="29" />
-      <File FileName="Assets\Script\Gamecontroller.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\FlipCard.cs" Line="1" Column="1" />
-      <File FileName="Assets\Script\CreateEvent.cs" Line="147" Column="3" />
-      <File FileName="Assets\Script\TimeBombCard.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\UpDownEvent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\Gamecontroller.cs" Line="286" Column="18" />
+      <File FileName="Assets\Script\FlipCard.cs" Line="78" Column="40" />
+      <File FileName="Assets\Script\CreateEvent.cs" Line="1" Column="1" />
+      <File FileName="Assets\Script\Player.cs" Line="134" Column="49" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

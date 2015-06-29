@@ -4,7 +4,7 @@ using System.Collections;
 public class ResetEvent : EventClass {
 
 	public override IEnumerator DoEvent(Player player){
-		GameObject restart = GameObject.FindWithTag("RestartItem");
+		GameObject restart = GameObject.FindWithTag("RestartIcon");
 		Vector3 lastPos;
 		Vector3 pos;
 

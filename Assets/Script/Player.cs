@@ -18,7 +18,18 @@ public class Player : MonoBehaviour {
 	List<GameObject> m_path;
 
 	private int m_stopTurn;
-	
+
+	private int m_timeBomb;
+
+	public Sprite[] m_timeBombSprite;
+
+	public SpriteRenderer m_bombSpriteRend;
+
+	void Start(){
+		m_bombSpriteRend.gameObject.SetActive (false);
+		m_timeBomb = -1;
+	}
+
 	// Use to go next position by pointDice
 	public IEnumerator GoNextPos(int pointDice, int maxNode){
 		
@@ -119,6 +130,21 @@ public class Player : MonoBehaviour {
 		m_stopTurn = eventStop;
 	}
 
+	public void SetTimeBomb(){
+		m_timeBomb = 3;
+		m_bombSpriteRend.sprite = m_timeBombSprite [2];
+	}
+
+	public void DecreaseTimeBomb(){
+		m_timeBomb --;
+		if(m_timeBomb >= 0)
+			m_bombSpriteRend.sprite = m_timeBombSprite [m_timeBomb];
+	}
+
+	public int GetTimeBomb(){
+		return m_timeBomb;
+	}
+
 	public int GetEventStop(){
 		return m_stopTurn;
 	}
@@ -129,5 +155,9 @@ public class Player : MonoBehaviour {
 
 	public void SetPath(List<GameObject> path){
 		m_path = path;
+	}
+
+	public void SetBombActive(bool active){
+		m_bombSpriteRend.gameObject.SetActive (active);
 	}
 }

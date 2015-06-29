@@ -3,12 +3,12 @@ using System.Collections;
 
 public class RestartCard : CardProp {
 
-	public GameObject m_itemRestart ;
+	private GameObject m_iconRestart ;
 	public EventClass m_restartPref;
 
 	public override IEnumerator DoCardEvent()
 	{
-		m_itemRestart = GameObject.FindWithTag("RestartItem");
+		m_iconRestart = GameObject.FindWithTag("RestartIcon");
 
 		Debug.Log ("CARD CONTROL(Restart) : " + m_cardControl);
 		
@@ -52,8 +52,8 @@ public class RestartCard : CardProp {
 		// Set trap to floor's position
 		Vector3 posTrap = floorTrap.gameObject.transform.position;
 		posTrap.z = -3;
-		m_itemRestart.transform.position = posTrap;
-		m_itemRestart.transform.localScale = new Vector3(1.3f, 1.3f, 1);
+		m_iconRestart.transform.position = posTrap;
+		m_iconRestart.transform.localScale = new Vector3(1.3f, 1.3f, 1);
 		
 		// move camera to postion that set trap
 		yield return StartCoroutine(	m_mainCameraMove.SetPosition(floorTrap.gameObject.transform.position));
@@ -62,17 +62,17 @@ public class RestartCard : CardProp {
 		m_dragCamera.SetIsDrag(false);
 		
 		// Run animation that show trap set
-		m_itemRestart.GetComponent<Animator>().SetTrigger("Appear");
+		m_iconRestart.GetComponent<Animator>().SetTrigger("Appear");
 		
 		float delay;
 		
 		// Delay wait animation finish
-		delay = m_itemRestart.GetComponent<Animator>().GetCurrentAnimatorStateInfo (0).length + 1f;
+		delay = m_iconRestart.GetComponent<Animator>().GetCurrentAnimatorStateInfo (0).length + 1f;
 		yield return new WaitForSeconds(delay );
 		
 		// Set item restart position for hide it
 		posTrap.z = -20;
-		m_itemRestart.transform.position = posTrap;
+		m_iconRestart.transform.position = posTrap;
 
 		m_cardControl.SetIsFinishTrap (false);
 

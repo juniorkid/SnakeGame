@@ -189,7 +189,17 @@ public class Gamecontroller : MonoBehaviour {
 		
 		// Delay wait camera move
 		yield return new WaitForSeconds (0.5f);
-		
+
+		// Check time bomb
+		if (m_player [m_currID].GetTimeBomb () > 0) {
+			Debug.Log("DECREASE TIME : " + m_player [m_currID].GetTimeBomb ());
+			m_player [m_currID].DecreaseTimeBomb ();
+		} else if(m_player [m_currID].GetTimeBomb () == 0){
+			m_player [m_currID].SetEventStop(3);
+			m_player [m_currID].SetBombActive(false);
+			m_player [m_currID].DecreaseTimeBomb ();
+		}
+
 		// Check event stop turn that player have
 		if (m_player[m_currID].GetEventStop() == normalMode) {
 			
@@ -235,11 +245,6 @@ public class Gamecontroller : MonoBehaviour {
 			// Get poice dice
 			m_pointDice = m_dice.GetPointDice () + 1;
 			
-			//	m_currentPos = 31;
-			//	m_pointDice = 1;
-			
-			//	Debug.Log ("After : " + m_pointDice);
-			
 			// Change State
 			m_stateID = GameStateID.Move;
 			//m_state = "Move";
@@ -276,10 +281,14 @@ public class Gamecontroller : MonoBehaviour {
 		
 		// Delay for wait check
 		yield return new WaitForSeconds(0.1f);
-		
+
+
+
+		yield return new WaitForSeconds (1f);
+
 		// Change player
 		ChangePlayerTurn ();
-		
+
 		// Change State
 		m_stateID = GameStateID.WaitRoll;
 		

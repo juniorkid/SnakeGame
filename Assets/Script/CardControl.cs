@@ -65,7 +65,7 @@ public class CardControl : EventClass {
 		m_isDoingTrap = false;
 
 		// Create item Restart
-		Instantiate(m_prefabRestart, new Vector3 ( 0, 0, -20), Quaternion.identity);
+	//	Instantiate(m_prefabRestart, new Vector3 ( 0, 0, -20), Quaternion.identity);
 
 		// Hide Card
 		ShowHideCard(false);
