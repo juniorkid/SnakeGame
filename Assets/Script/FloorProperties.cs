@@ -5,6 +5,8 @@ public class FloorProperties : MonoBehaviour {
 
 	private float m_delay = 0.1f;
 	private bool m_isTrap;
+	public bool m_isCanDestroy;
+
 	private EventClass m_eventObj ;
 
 	private string m_eventType;
@@ -15,6 +17,7 @@ public class FloorProperties : MonoBehaviour {
 		m_cardControl = CardControl.Getsingleton ();
 		m_eventObj = null;
 		m_eventType = "Normal";
+		m_isCanDestroy = false;
 	}
 	
 	void OnMouseDown(){
@@ -23,18 +26,34 @@ public class FloorProperties : MonoBehaviour {
 	}
 
 	void OnMouseUp(){
+
+		bool isTrapDone;
+
 		if (m_isTrap) {
 			bool isDoingTrap = m_cardControl.IsDoingTrap ();
 			
 			Debug.Log ("Doing Trap : " + isDoingTrap);
-			
+			Debug.Log ("OBJ : " + m_eventObj);
 			// Check for trap
-			if (isDoingTrap && m_eventType == "Normal") {
-				
+			if(isDoingTrap && m_eventObj == null){
+				isTrapDone = true;
+			}
+			else if (isDoingTrap && m_isCanDestroy) {
+				Destroy(m_eventObj.gameObject);
+				isTrapDone = true;
+			}
+			else
+				isTrapDone = false;
+
+			if(isTrapDone){
 				Debug.Log("Floor" + gameObject.name);
 				
 				m_cardControl.SetFloorTrap (this);
 				m_cardControl.SetIsFinishTrap (true);
+
+				m_isCanDestroy = true;
+
+				isTrapDone = false;
 			}
 		}
 	}

@@ -18,13 +18,7 @@ public class Gamecontroller : MonoBehaviour {
 	public Camera m_mainCamera;
 	
 	private List<GameObject> m_path;
-	
-	private int[] m_event; // Tell what player will do
-	
-	private bool[] m_isEventCard;
-	
-	private int[] m_eventStop;	// Keep turn that each player will stop
-	
+
 	private int m_pointDice;
 	
 	public Player[] m_player;
@@ -62,9 +56,6 @@ public class Gamecontroller : MonoBehaviour {
 		// Set player number
 		m_stateID = GameStateID.GetPath;
 		
-		// Create array for keep player event stop
-		m_eventStop = new int[m_numPlayer];
-		
 		// Set player id current
 		m_currID = 0;
 		
@@ -73,7 +64,6 @@ public class Gamecontroller : MonoBehaviour {
 
 		for (int i = 0; i < m_numPlayer; i++) {
 			m_player[i].gameObject.SetActive(true);
-			m_eventStop [i] = 0;
 		}
 		
 		m_mainCameraMove = m_mainCamera.GetComponent<MainCameraMove> ();
@@ -116,8 +106,6 @@ public class Gamecontroller : MonoBehaviour {
 		m_maxNode = m_path.Count;
 		
 		// Create array for get all event
-		m_event = new int[m_path.Count];
-		m_isEventCard = new bool[m_path.Count];	
 		m_createEvent.CreateAllEvent (m_path);
 		
 		// Set event card
@@ -170,12 +158,12 @@ public class Gamecontroller : MonoBehaviour {
 			EventClass eventObj = m_path [currPos].GetComponent<FloorProperties> ().GetEvent ();
 			//eventObj = m_path [currPos].GetComponent<FloorProperties> ().GetEvent ();
 			if(eventObj == null || currPos == lastCurrPos){
-				Debug.Log("OUT");
 				break;
 			}
 			else {
 				lastCurrPos = currPos;
-				Debug.Log("Event : " + eventObj);
+
+				// Start event 
 				yield return eventObj.StartCoroutine(eventObj.DoEvent(m_player[m_currID]));
 			}
 		}	

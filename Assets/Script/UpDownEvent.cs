@@ -6,6 +6,7 @@ public class UpDownEvent : EventClass {
 	private int m_PosUpDown;
 
 	public override IEnumerator DoEvent(Player player = null){
+		// Move player to position
 		yield return StartCoroutine( player.GoAnyPos (m_PosUpDown));	
 		yield break;
 	}

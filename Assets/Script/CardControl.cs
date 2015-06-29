@@ -16,12 +16,7 @@ public class CardControl : EventClass {
 
 	public Camera m_mainCamera;
 
-	private bool[] m_isEventCard;
-
-	private int[] m_StopUpDownEvent;
-
 	public GameObject m_prefabRestart;
-	private GameObject m_itemRestart;
 
 	FloorProperties m_floorTrap;
 	
@@ -29,7 +24,7 @@ public class CardControl : EventClass {
 	private GameObject m_textObj;
 
 	private DragCamera m_dragCamera;
-	private MainCameraMove m_mainCamearaMove;
+//	private MainCameraMove m_mainCamearaMove;
 
 	// Type Card
 
@@ -56,7 +51,7 @@ public class CardControl : EventClass {
 
 		// Set main camera move and Drag cameara
 		m_dragCamera = m_mainCamera.GetComponent<DragCamera> ();
-		m_mainCamearaMove = m_mainCamera.GetComponent<MainCameraMove> ();
+	//	m_mainCamearaMove = m_mainCamera.GetComponent<MainCameraMove> ();
 
 		Debug.Log ("Drag : " + m_dragCamera);
 
@@ -67,16 +62,16 @@ public class CardControl : EventClass {
 		m_isFinishFlip = false;
 		m_isFinishTrap = false;
 		m_isCanFlip = false;
-		m_isDoingTrap = true;
+		m_isDoingTrap = false;
 
 		// Create item Restart
-		m_itemRestart = Instantiate(m_prefabRestart, new Vector3 ( 0, 0, -20), Quaternion.identity) as GameObject;
+		Instantiate(m_prefabRestart, new Vector3 ( 0, 0, -20), Quaternion.identity);
 
 		// Hide Card
 		ShowHideCard(false);
 
 		// Hide Text 
-		m_textMesh.gameObject.SetActive(false);
+		m_textMesh.GetComponent<MeshRenderer> ().enabled = false;
 
 	}
 
@@ -119,6 +114,7 @@ public class CardControl : EventClass {
 
 		// Check if card is restart item
 		yield return StartCoroutine( m_cardObj.DoCardEvent ());
+		Destroy (m_cardObj.gameObject);
 	}
 
 	// Show hide all card
@@ -194,16 +190,14 @@ public class CardControl : EventClass {
 	public void SetCard(CardProp cardNum){
 		Debug.Log ("CARD NUM : " + cardNum);
 
-		m_cardObj = Instantiate( cardNum.gameObject, new Vector3( 0, 0, 0), Quaternion.identity) as CardProp;
+		GameObject temp;
+
+		temp = Instantiate( cardNum.gameObject, new Vector3( 0, 0, 0), Quaternion.identity) as GameObject;
+
+		m_cardObj = temp.GetComponent<CardProp> ();
+
+		Debug.Log ("CARD OBJ : " + temp);
 
 	}
-
-	// Check that postion don't have event
-	public bool CheckEvent(int pos){
-		if (m_StopUpDownEvent [pos] == 0 && m_isEventCard [pos] == false )
-			return true;
-		else {
-			return false;
-		}
-	}
+	
 }

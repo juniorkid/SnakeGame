@@ -8,10 +8,6 @@ public class CreateEvent : MonoBehaviour {
 	public int m_maxEventCard;
 	public int m_maxEventFB;
 
-	private int[] m_event;
-
-	private bool[] m_isEventCard;
-
 	public GameObject[] m_stop;
 	public GameObject[] m_upDown;
 	public GameObject m_deck;
@@ -66,7 +62,7 @@ public class CreateEvent : MonoBehaviour {
 		// Set start position of UP DOWN event 
 		posEvent = (int)(maxNode/6f);
 
-		for(int i = 0 ; i < m_maxEventFB && posEvent < maxNode;i++) {
+		for(int i = 0 ; i < m_maxEventFB && posEvent < maxNode-1;i++) {
 			Debug.Log ("Create EVENT FB : " + i.ToString());
 
 			// Check that position don't have event
@@ -132,11 +128,9 @@ public class CreateEvent : MonoBehaviour {
 
 			// Check that position doesn't have event
 
-			if(m_isEventCard[posEvent] == false && m_event[posEvent] == m_noEvent){
+			if(path[posEvent].GetComponent<FloorProperties>().GetEvent() == null){
 
-				//Debug.Log ("Create EVENT Card : " + i.ToString());
-
-				m_isEventCard[posEvent] = true;
+				Debug.Log("PATH : " + path[posEvent]);
 
 				// Set position and create object
 				pos = path[posEvent].transform.position;
@@ -150,17 +144,5 @@ public class CreateEvent : MonoBehaviour {
 			}
 		}
 
-	}
-
-	// Return event Stop , Up Down
-
-	public int[] GetEvent(){
-		return m_event;
-	}
-
-	// Return card event
-
-	public bool[] GetPosEventCard(){
-		return m_isEventCard;
 	}
 }
