@@ -8,6 +8,14 @@ public class PlayerPop
 	public int m_id;
 	public List<int> m_itemIdList;
 	public int m_gold;
+
+	public void SetId(int id){
+		m_id = id;
+	}
+
+	public int GetId(){
+		return 	m_id;
+	}
 }
 public class Player : MonoBehaviour {
 
@@ -25,9 +33,15 @@ public class Player : MonoBehaviour {
 
 	public SpriteRenderer m_bombSpriteRend;
 
+	public PlayerPop m_playerPop;
+
+	public int m_id;
+
 	void Start(){
+		m_playerPop = new PlayerPop ();
 		m_bombSpriteRend.gameObject.SetActive (false);
 		m_timeBomb = -1;
+		m_playerPop.SetId (m_id);
 	}
 
 	// Use to go next position by pointDice
@@ -126,6 +140,10 @@ public class Player : MonoBehaviour {
 		return m_currentPos;
 	}
 
+	public void SetStartPos(){
+		m_currentPos = 0;
+	}
+
 	public void SetEventStop(int eventStop){
 		m_stopTurn = eventStop;
 	}
@@ -159,5 +177,23 @@ public class Player : MonoBehaviour {
 
 	public void SetBombActive(bool active){
 		m_bombSpriteRend.gameObject.SetActive (active);
+	}
+
+	public void MoveToCheckPoint(){
+		Transform[] checkPoint;
+		Vector3 pos;
+		checkPoint = m_path [m_currentPos].GetComponentsInChildren <Transform>();
+		pos = checkPoint[m_playerPop.GetId ()].position;
+		pos.z = -2;
+		gameObject.transform.position = pos;
+	}
+
+	public void MoveToCenter(){
+		Transform[] checkPoint;
+		Vector3 pos;
+		checkPoint = m_path [m_currentPos].GetComponentsInChildren <Transform>();
+		pos = checkPoint[0].position;
+		pos.z = -2;
+		gameObject.transform.position = pos;
 	}
 }

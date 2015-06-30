@@ -112,11 +112,10 @@ public class Gamecontroller : MonoBehaviour {
 		//		m_cardControl.SetAllEvent (m_event, m_isEventCard);
 		
 		// Set player Path and start position
-		Vector3 startPos = m_path [0].transform.position;
-		startPos.z = -2;
 		for (int i = 0; i < m_numPlayer; i++) {
-			m_player [i].SetPath (m_path);
-			m_player [i].transform.position = startPos;
+			m_player[i].SetPath(m_path);
+			m_player[i].SetStartPos();
+			m_player[i].MoveToCheckPoint();
 		}
 		
 		// Delay for wait set player
@@ -183,7 +182,10 @@ public class Gamecontroller : MonoBehaviour {
 		
 		// Delay wait for set button
 		yield return new WaitForSeconds (0.5f);
-		
+
+		// Move player to center of floor
+		m_player[m_currID].MoveToCenter ();
+
 		// Move camera to player
 		yield return StartCoroutine( m_mainCameraMove.SetPosition (m_player[m_currID].transform.position));
 		
@@ -280,11 +282,11 @@ public class Gamecontroller : MonoBehaviour {
 		Debug.Log ("END TURN WAIT OTHER PLAYER");
 		
 		// Delay for wait check
-		yield return new WaitForSeconds(0.1f);
+		yield return new WaitForSeconds(0.5f);
 
-
-
-		yield return new WaitForSeconds (1f);
+		// Move to check point
+		m_player[m_currID].MoveToCheckPoint ();
+		yield return new WaitForSeconds (0.5f);
 
 		// Change player
 		ChangePlayerTurn ();
