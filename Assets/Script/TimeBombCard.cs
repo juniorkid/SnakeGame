@@ -3,7 +3,6 @@ using System.Collections;
 
 public class TimeBombCard : CardProp {
 
-	private GameObject m_iconBomb ;
 	public EventClass m_BombPref;
 	
 	public override IEnumerator DoCardEvent()

@@ -204,7 +204,14 @@ public class Gamecontroller : MonoBehaviour {
 
 		// Check event stop turn that player have
 		if (m_player[m_currID].GetEventStop() == normalMode) {
-			
+
+			// UFO
+			if(m_player[m_currID].IsUFO()){
+				yield return StartCoroutine( m_player[m_currID].runUFO(-1));
+				m_player[m_currID].SetIsUFO(false);	
+			}
+
+
 			// Show button and dice
 			m_mainCameraMove.ShowDiceButton ();
 			
@@ -219,7 +226,7 @@ public class Gamecontroller : MonoBehaviour {
 			//			Debug.Log (hasClick);
 			
 			// Random time to roll dice
-			float m_timeRandom = Random.Range(3F, 8F);
+			float m_timeRandom = Random.Range(1F, 3F);
 			
 			// Wait unitl player click button
 			while (!isClick) {
@@ -285,7 +292,8 @@ public class Gamecontroller : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		// Move to check point
-		m_player[m_currID].MoveToCheckPoint ();
+		if(!m_player[m_currID].IsUFO())
+			m_player[m_currID].MoveToCheckPoint ();
 		yield return new WaitForSeconds (0.5f);
 
 		// Change player

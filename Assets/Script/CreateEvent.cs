@@ -130,7 +130,7 @@ public class CreateEvent : MonoBehaviour {
 
 			if(path[posEvent].GetComponent<FloorProperties>().GetEvent() == null){
 
-				Debug.Log("PATH : " + path[posEvent]);
+	//			Debug.Log("PATH : " + path[posEvent]);
 
 				// Set position and create object
 				pos = path[posEvent].transform.position;

@@ -75,7 +75,7 @@ public class FlipCard : MonoBehaviour {
 		yield return new WaitForSeconds(delay);
 
 		// Change front sprite follow event card
-		m_spriteRend.sprite = m_spriteFront[0];
+		m_spriteRend.sprite = m_spriteFront[2];
 
 		Debug.Log ("NEW SPRITE");
 
@@ -91,7 +91,7 @@ public class FlipCard : MonoBehaviour {
 		m_cardControl.SetIsFinishFlip (true);
 
 		// Set event card number
-		m_cardControl.SetCard (m_cardObject[0]);
+		m_cardControl.SetCard (m_cardObject[2]);
 	
 		// Change card to back
 		m_spriteRend.sprite = m_spriteBack;

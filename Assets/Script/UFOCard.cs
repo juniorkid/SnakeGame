@@ -1,10 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UFOCard : EventClass {
+public class UFOCard : CardProp {
 
-	public override IEnumerator DoEvent(Player player){
-		Debug.Log ("UFO");
+	public EventClass m_UFOPref;
+	
+	public override IEnumerator DoCardEvent()
+	{
+		yield return StartCoroutine (Trap("UFOIcon", m_UFOPref));
 		yield break;
 	}
 }
+	

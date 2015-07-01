@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Dice : MonoBehaviour {
 
@@ -9,6 +10,8 @@ public class Dice : MonoBehaviour {
 
 	public bool m_isStartRoll;
 	public bool m_isStopRoll;
+
+	public bool m_isCheat;
 
 	public Sprite[] m_diceSprite;
 
@@ -48,20 +51,22 @@ public class Dice : MonoBehaviour {
 		m_isStartRoll = false;
 		m_speedRoll = 0.01f;
 
-		// Roll dice until m_stopRoll equal true
-		while (!m_isStopRoll) {
-	//		Debug.Log ("Roll : " + m_pointDice);
-			m_pointDice ++;
-			if(m_pointDice > 5){
-				m_pointDice = 0;
+		if (!m_isCheat) {
+			// Roll dice until m_stopRoll equal true
+			while (!m_isStopRoll) {
+				//		Debug.Log ("Roll : " + m_pointDice);
+				m_pointDice ++;
+				if (m_pointDice > 5) {
+					m_pointDice = 0;
+				}
+
+				// Change sprite follow point dice
+				m_spriteRend.sprite = m_diceSprite [m_pointDice];
+				yield return new WaitForSeconds (m_speedRoll);
+
+				// Decrease speed random roll
+				m_speedRoll += 0.04f;
 			}
-
-			// Change sprite follow point dice
-			m_spriteRend.sprite = m_diceSprite[m_pointDice];
-			yield return new WaitForSeconds(m_speedRoll);
-
-			// Decrease speed random roll
-			m_speedRoll += 0.04f;
 		}
 
 	//	Debug.Log ("GET POINT DONE : " + m_pointDice);

@@ -3,7 +3,6 @@ using System.Collections;
 
 public class RestartCard : CardProp {
 
-	private GameObject m_iconRestart ;
 	public EventClass m_restartPref;
 
 	public override IEnumerator DoCardEvent()

@@ -17,6 +17,7 @@ public class PlayerPop
 		return 	m_id;
 	}
 }
+
 public class Player : MonoBehaviour {
 
 	private int m_currentPos;
@@ -37,10 +38,15 @@ public class Player : MonoBehaviour {
 
 	public int m_id;
 
+	public bool m_isUFO;
+
+	public UFOControl m_ufoControl;
+
 	void Start(){
 		m_playerPop = new PlayerPop ();
 		m_bombSpriteRend.gameObject.SetActive (false);
 		m_timeBomb = -1;
+		m_isUFO = false;
 		m_playerPop.SetId (m_id);
 	}
 
@@ -195,5 +201,25 @@ public class Player : MonoBehaviour {
 		pos = checkPoint[0].position;
 		pos.z = -2;
 		gameObject.transform.position = pos;
+	}
+
+	public IEnumerator runUFO(float speed){
+		if (!m_isUFO) {
+			m_stopTurn = 1;
+			m_isUFO = true;
+		} else {
+			m_isUFO = false;
+		}
+
+		yield return StartCoroutine( m_ufoControl.SetAnimationUFO (speed));
+		yield break;
+	}
+
+	public void SetIsUFO(bool isUFO){
+		m_isUFO = isUFO;
+	}
+
+	public bool IsUFO(){
+		return m_isUFO ;
 	}
 }
