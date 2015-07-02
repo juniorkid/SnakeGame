@@ -6,12 +6,17 @@ public class UFOControl : MonoBehaviour {
 	public Animator m_UFOamimator;
 	public Animator m_playerAnimator;
 
-	private float m_speed;
+	public Player m_player;
 
-	public IEnumerator SetAnimationUFO(float speed){
-		m_speed = speed;
+	private bool m_isUFO = false;
 
-		m_UFOamimator.SetFloat ("Speed", m_speed);
+	public IEnumerator SetAnimationUFO(){
+
+		m_isUFO = m_UFOamimator.GetBool ("IsGo");
+
+		m_isUFO = !m_isUFO;
+
+		m_UFOamimator.SetBool ("IsGo", m_isUFO);
 
 		yield return new WaitForSeconds (0.01f);
 
@@ -27,11 +32,14 @@ public class UFOControl : MonoBehaviour {
 
 	public void runPlayer(){
 		bool appear = m_playerAnimator.GetBool ("Appear");
+	
+		appear = !appear;
+		m_playerAnimator.SetBool ("Appear", appear);
+	}
 
-		if (m_speed == 1 || m_speed == -1) {
-			appear = !appear;
-			m_playerAnimator.SetBool ("Appear", appear);
-			m_speed = 0;
+	void Update(){
+		if (!m_player.IsUFO() && m_isUFO) {
+			StartCoroutine(SetAnimationUFO());
 		}
 	}
 }

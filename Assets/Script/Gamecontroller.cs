@@ -144,6 +144,10 @@ public class Gamecontroller : MonoBehaviour {
 	
 	// Event State
 	private IEnumerator Event(){
+
+		// Can't drag
+		m_dragCamera.SetIsDrag (false);
+
 		int lastCurrPos = 0;
 		bool isEvent = true;
 		
@@ -166,13 +170,20 @@ public class Gamecontroller : MonoBehaviour {
 				yield return eventObj.StartCoroutine(eventObj.DoEvent(m_player[m_currID]));
 			}
 		}	
+
+		// Can drag
+		m_dragCamera.SetIsDrag (true);
+
 		yield break;
 	}
 	
 	// Roll State
 	private IEnumerator Roll(){
 		Debug.Log ("ROLL");
-		
+
+		// Can't drag
+		m_dragCamera.SetIsDrag (false);
+
 		int normalMode = 0;
 		
 		m_stateID = GameStateID.Rolling;
@@ -182,6 +193,9 @@ public class Gamecontroller : MonoBehaviour {
 		
 		// Delay wait for set button
 		yield return new WaitForSeconds (0.5f);
+
+		// Change player windows
+		m_player [m_currID].ChangePlayerWindow ();
 
 		// Move player to center of floor
 		m_player[m_currID].MoveToCenter ();
@@ -193,25 +207,22 @@ public class Gamecontroller : MonoBehaviour {
 		yield return new WaitForSeconds (0.5f);
 
 		// Check time bomb
-		if (m_player [m_currID].GetTimeBomb () > 0) {
+		bool isBomb = m_player[m_currID].IsBomb();
+		if (isBomb) {
 			Debug.Log("DECREASE TIME : " + m_player [m_currID].GetTimeBomb ());
 			m_player [m_currID].DecreaseTimeBomb ();
-		} else if(m_player [m_currID].GetTimeBomb () == 0){
-			m_player [m_currID].SetEventStop(3);
-			m_player [m_currID].SetBombActive(false);
-			m_player [m_currID].DecreaseTimeBomb ();
 		}
+
+		// Wait for bomb event
+		yield return new WaitForSeconds (0.01f);
 
 		// Check event stop turn that player have
 		if (m_player[m_currID].GetEventStop() == normalMode) {
 
-			// UFO
 			if(m_player[m_currID].IsUFO()){
-				yield return StartCoroutine( m_player[m_currID].runUFO(-1));
-				m_player[m_currID].SetIsUFO(false);	
+				m_player[m_currID].SetIsUFO(false);
+				yield return new WaitForSeconds(5f);
 			}
-
-
 			// Show button and dice
 			m_mainCameraMove.ShowDiceButton ();
 			
@@ -279,7 +290,9 @@ public class Gamecontroller : MonoBehaviour {
 		//	m_dragCamera.SetDrag (false);
 		//m_state = "Moving";
 		Debug.Log (m_stateID);
-		
+
+		m_dragCamera.SetIsDrag (false);
+
 		// Wait player move
 		yield return StartCoroutine(m_player[m_currID].GoNextPos( m_pointDice, m_maxNode-1));
 		
@@ -298,6 +311,8 @@ public class Gamecontroller : MonoBehaviour {
 
 		// Change player
 		ChangePlayerTurn ();
+
+		m_dragCamera.SetIsDrag (true);
 
 		// Change State
 		m_stateID = GameStateID.WaitRoll;

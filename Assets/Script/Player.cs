@@ -30,24 +30,36 @@ public class Player : MonoBehaviour {
 
 	private int m_timeBomb;
 
-	public Sprite[] m_timeBombSprite;
-
-	public SpriteRenderer m_bombSpriteRend;
-
 	public PlayerPop m_playerPop;
 
 	public int m_id;
 
 	public bool m_isUFO;
 
+	public bool m_isBomb;
+
 	public UFOControl m_ufoControl;
+
+	public SpriteRenderer m_playerWindow;
+
+	public Sprite m_playerWindowSprite;
+
+	public TimeBomb m_bomb;
+
+	public TextMesh m_namePlayer;
+
+	public string m_name;
+
+	public ItemClass[] m_slotItem;
+
+	public GameObject[] m_item;
 
 	void Start(){
 		m_playerPop = new PlayerPop ();
-		m_bombSpriteRend.gameObject.SetActive (false);
 		m_timeBomb = -1;
 		m_isUFO = false;
 		m_playerPop.SetId (m_id);
+		m_playerPop.m_name = m_name;
 	}
 
 	// Use to go next position by pointDice
@@ -100,7 +112,23 @@ public class Player : MonoBehaviour {
 		
 		yield break;
 	}
-	
+
+	public void ChangePlayerWindow(){
+		m_playerWindow.sprite = m_playerWindowSprite;
+		m_namePlayer.text = m_playerPop.m_name;
+		ShowItem ();
+	}
+
+	public void ShowItem(){
+		GameObject item;
+		for (int i = 0; i < 4; i++) {
+			if(m_item[i] != null){
+				item = (GameObject)Instantiate(m_item[i], new Vector3(0, 0, -20), Quaternion.identity);
+				m_slotItem[i].SetCardItem(item);
+			}
+		}
+	}
+
 	// Go any posion 
 	public IEnumerator GoAnyPos(int pos){
 		Debug.Log ("UP DOWN EVENT");
@@ -154,19 +182,24 @@ public class Player : MonoBehaviour {
 		m_stopTurn = eventStop;
 	}
 
-	public void SetTimeBomb(){
-		m_timeBomb = 3;
-		m_bombSpriteRend.sprite = m_timeBombSprite [2];
+	public void SetIsBomb(bool isBomb){
+		m_isBomb = isBomb;
 	}
 
-	public void DecreaseTimeBomb(){
-		m_timeBomb --;
-		if(m_timeBomb >= 0)
-			m_bombSpriteRend.sprite = m_timeBombSprite [m_timeBomb];
+	public void StartTimeBomb(int timeBomb){
+		m_timeBomb = timeBomb;
+	}
+	
+	public bool IsBomb(){
+		return m_isBomb;
 	}
 
 	public int GetTimeBomb(){
 		return m_timeBomb;
+	}
+	
+	public void DecreaseTimeBomb(){
+		m_timeBomb --;
 	}
 
 	public int GetEventStop(){
@@ -180,11 +213,7 @@ public class Player : MonoBehaviour {
 	public void SetPath(List<GameObject> path){
 		m_path = path;
 	}
-
-	public void SetBombActive(bool active){
-		m_bombSpriteRend.gameObject.SetActive (active);
-	}
-
+	
 	public void MoveToCheckPoint(){
 		Transform[] checkPoint;
 		Vector3 pos;
@@ -203,23 +232,22 @@ public class Player : MonoBehaviour {
 		gameObject.transform.position = pos;
 	}
 
-	public IEnumerator runUFO(float speed){
-		if (!m_isUFO) {
-			m_stopTurn = 1;
-			m_isUFO = true;
-		} else {
-			m_isUFO = false;
-		}
-
-		yield return StartCoroutine( m_ufoControl.SetAnimationUFO (speed));
-		yield break;
-	}
-
 	public void SetIsUFO(bool isUFO){
 		m_isUFO = isUFO;
 	}
 
+	// Check player in UFO EVENT
 	public bool IsUFO(){
 		return m_isUFO ;
+	}
+
+	// Get object UFO
+	public UFOControl GetUFO(){
+		return m_ufoControl;
+	}
+
+	// Get object bomb
+	public TimeBomb GetBomb(){
+		return m_bomb;
 	}
 }
