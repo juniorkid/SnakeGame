@@ -36,6 +36,8 @@ public class CardControl : EventClass {
 
 	private Transform[] m_allCard;
 
+	public Gamecontroller m_gameController;
+
 	private static CardControl m_singleton;
 	public static CardControl Getsingleton(){
 		return m_singleton;
@@ -111,9 +113,10 @@ public class CardControl : EventClass {
 	}
 
 	public IEnumerator CallEventCard(){
+		Debug.Log ("Player : " + m_gameController.GetCurrentPlayer ());
 
 		// Check if card is restart item
-		yield return StartCoroutine( m_cardObj.DoCardEvent ());
+		yield return StartCoroutine( m_cardObj.DoCardEvent (m_gameController.GetCurrentPlayer()));
 		Destroy (m_cardObj.gameObject);
 	}
 

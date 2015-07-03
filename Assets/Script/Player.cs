@@ -52,7 +52,9 @@ public class Player : MonoBehaviour {
 
 	public ItemClass[] m_slotItem;
 
-	public GameObject[] m_item;
+	public ItemClass[] m_item;
+
+	public bool m_isTurn;
 
 	void Start(){
 		m_playerPop = new PlayerPop ();
@@ -120,11 +122,17 @@ public class Player : MonoBehaviour {
 	}
 
 	public void ShowItem(){
-		GameObject item;
 		for (int i = 0; i < 4; i++) {
-			if(m_item[i] != null){
-				item = (GameObject)Instantiate(m_item[i], new Vector3(0, 0, -20), Quaternion.identity);
-				m_slotItem[i].SetCardItem(item);
+			m_slotItem[i].SetCardItem(m_item[i]);
+		}
+	}
+
+	public void GetItem(ItemClass item){
+		for (int i = 0; i < 4; i++) {
+			if(m_item[i] == null){
+				m_item[i] = item;
+				ShowItem();
+				break;
 			}
 		}
 	}

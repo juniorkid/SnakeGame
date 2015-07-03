@@ -41,8 +41,6 @@ public class Gamecontroller : MonoBehaviour {
 	
 	private int m_maxNode;
 	
-	public CardControl m_cardControl;
-	
 	private MainCameraMove m_mainCameraMove;
 	
 	// Use this for initialization
@@ -107,9 +105,6 @@ public class Gamecontroller : MonoBehaviour {
 		
 		// Create array for get all event
 		m_createEvent.CreateAllEvent (m_path);
-		
-		// Set event card
-		//		m_cardControl.SetAllEvent (m_event, m_isEventCard);
 		
 		// Set player Path and start position
 		for (int i = 0; i < m_numPlayer; i++) {
@@ -189,7 +184,7 @@ public class Gamecontroller : MonoBehaviour {
 		m_stateID = GameStateID.Rolling;
 		
 		// Set button can click
-		m_buttonRoll.SetClickDefualt ();
+		m_buttonRoll.SetClick (false);
 		
 		// Delay wait for set button
 		yield return new WaitForSeconds (0.5f);
@@ -230,7 +225,10 @@ public class Gamecontroller : MonoBehaviour {
 			
 			// Set can drag
 			m_dragCamera.SetIsDrag (true);
-			
+
+			// Set dice defualt
+			m_dice.m_isSetPoint = false;
+
 			// Get value button
 			bool isClick = m_buttonRoll.GetClick();
 			
@@ -249,14 +247,15 @@ public class Gamecontroller : MonoBehaviour {
 			yield return StartCoroutine( m_mainCameraMove.SetPosition (m_player[m_currID].transform.position));
 			
 			// Start roll dice
+			m_dice.SetTimeRandom(m_timeRandom);
 			m_dice.StartRoll ();
 			
 			// Set can't drag
 			m_dragCamera.SetIsDrag (false);
 			
 			// Wait for roll dice
-			yield return new WaitForSeconds (m_timeRandom);
-			m_dice.StopRoll ();
+			while(!m_dice.isStopRoll())
+				yield return null;
 			
 			//	m_dragCamera.SetDrag (true);
 			
@@ -326,6 +325,10 @@ public class Gamecontroller : MonoBehaviour {
 		m_currID ++;
 		if (m_currID == m_numPlayer)
 			m_currID = 0;
+	}
+
+	public Player GetCurrentPlayer(){
+		return m_player[m_currID];
 	}
 	
 }

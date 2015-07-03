@@ -3,26 +3,26 @@ using System.Collections;
 
 public class Roll : MonoBehaviour {
 
-	private bool m_hasClick;
+	private bool m_isClick;
 	
 	// Use this for initialization
 	void Start(){
-		m_hasClick = false;
+		m_isClick = false;
 	}
 
 	void OnMouseDown() {
-		if (!m_hasClick) {
+		if (!m_isClick) {
 	//		Debug.Log ("Rolled");
-			m_hasClick = true;
+			m_isClick = true;
 		}
 	}
 
 	// Set player can click roll
-	public void SetClickDefualt(){
-		m_hasClick = false;
+	public void SetClick(bool isClick){
+		m_isClick = isClick;
 	}
 	
 	public bool GetClick(){
-		return m_hasClick;
+		return m_isClick;
 	}
 }

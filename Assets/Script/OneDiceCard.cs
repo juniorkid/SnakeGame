@@ -1,14 +1,13 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class UFOCard : CardProp {
+public class OneDiceCard : CardProp {
 
-	public EventClass m_UFOPref;
+	public ItemClass m_onePrefab;
 	
 	public override IEnumerator DoCardEvent(Player player)
 	{
-		yield return StartCoroutine (Trap("UFOIcon", m_UFOPref));
+		KeepItem(player, m_onePrefab);
 		yield break;
 	}
 }
-	

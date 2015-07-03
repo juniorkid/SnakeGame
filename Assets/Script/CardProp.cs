@@ -21,7 +21,7 @@ public class CardProp : MonoBehaviour {
 		Debug.Log ("CARD CONTROL : " + m_cardControl);
 	}
 
-	public virtual IEnumerator DoCardEvent()
+	public virtual IEnumerator DoCardEvent(Player player)
 	{
 		yield return 0;
 	}
@@ -97,4 +97,10 @@ public class CardProp : MonoBehaviour {
 		
 		m_dragCamera.SetIsDrag(false);
 	}
+
+	public void KeepItem(Player player, ItemClass itemPrefab){
+		GameObject tempItem;
+		tempItem = (GameObject)Instantiate (itemPrefab.gameObject, new Vector3 (0, 0, -20), Quaternion.identity);
+		player.GetItem (tempItem.GetComponent<ItemClass>());
+	}	
 }

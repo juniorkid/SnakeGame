@@ -11,7 +11,7 @@ public class Dice : MonoBehaviour {
 	public bool m_isStartRoll;
 	public bool m_isStopRoll;
 
-	public bool m_isCheat;
+	public bool m_isSetPoint;
 
 	public Sprite[] m_diceSprite;
 
@@ -41,17 +41,14 @@ public class Dice : MonoBehaviour {
 		m_isStopRoll = false;
 	}
 
-	// Use to set state for stop roll
-	public void StopRoll(){
-		m_isStopRoll = true;
-	}
-
 	// Rolling dice
 	private IEnumerator Rolling(){
 		m_isStartRoll = false;
 		m_speedRoll = 0.01f;
+		
+		if (!m_isSetPoint) {
+			StartCoroutine (TimeStopDice ());
 
-		if (!m_isCheat) {
 			// Roll dice until m_stopRoll equal true
 			while (!m_isStopRoll) {
 				//		Debug.Log ("Roll : " + m_pointDice);
@@ -67,14 +64,29 @@ public class Dice : MonoBehaviour {
 				// Decrease speed random roll
 				m_speedRoll += 0.04f;
 			}
+		} else {
+			m_isStopRoll = true;
 		}
 
 	//	Debug.Log ("GET POINT DONE : " + m_pointDice);
 		yield break;
 	}
+	
+	public bool isStopRoll(){
+		return m_isStopRoll;
+	}
 
 	// Get point dice
 	public int GetPointDice(){
 		return m_pointDice;
+	}
+
+	public void SetTimeRandom(float timeRandom){
+		m_timeRandom = timeRandom;
+	}
+
+	public IEnumerator TimeStopDice(){
+		yield return new WaitForSeconds(m_timeRandom);
+		m_isStopRoll = true;
 	}
 }
