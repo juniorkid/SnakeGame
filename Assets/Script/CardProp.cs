@@ -98,9 +98,9 @@ public class CardProp : MonoBehaviour {
 		m_dragCamera.SetIsDrag(false);
 	}
 
-	public void KeepItem(Player player, ItemClass itemPrefab){
+	public void KeepItem(Player player, Item itemPrefab){
 		GameObject tempItem;
 		tempItem = (GameObject)Instantiate (itemPrefab.gameObject, new Vector3 (0, 0, -20), Quaternion.identity);
-		player.GetItem (tempItem.GetComponent<ItemClass>());
+		player.GetItem (tempItem.GetComponent<Item>());
 	}	
 }

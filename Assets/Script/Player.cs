@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -24,7 +24,7 @@ public class Player : MonoBehaviour {
 	public Camera m_mainCamera;
 	float m_moveSpeed = 1f;
 
-	List<GameObject> m_path;
+	List<FloorProperties> m_path;
 
 	private int m_stopTurn;
 
@@ -34,9 +34,9 @@ public class Player : MonoBehaviour {
 
 	public int m_id;
 
-	public bool m_isUFO;
+	private bool m_isUFO;
 
-	public bool m_isBomb;
+	private bool m_isBomb;
 
 	public UFOControl m_ufoControl;
 
@@ -50,11 +50,13 @@ public class Player : MonoBehaviour {
 
 	public string m_name;
 
-	public ItemClass[] m_slotItem;
+	public Item[] m_slotItem;
 
-	public ItemClass[] m_item;
+	public Item[] m_item;
 
-	public bool m_isTurn;
+	private bool m_isDoubleDice;
+
+	private bool m_isArmor;
 
 	void Start(){
 		m_playerPop = new PlayerPop ();
@@ -62,6 +64,7 @@ public class Player : MonoBehaviour {
 		m_isUFO = false;
 		m_playerPop.SetId (m_id);
 		m_playerPop.m_name = m_name;
+		m_isDoubleDice = false;
 	}
 
 	// Use to go next position by pointDice
@@ -121,13 +124,16 @@ public class Player : MonoBehaviour {
 		ShowItem ();
 	}
 
+	// Show item in list on Slot on item
+
 	public void ShowItem(){
 		for (int i = 0; i < 4; i++) {
 			m_slotItem[i].SetCardItem(m_item[i]);
 		}
 	}
 
-	public void GetItem(ItemClass item){
+	// Put item in list
+	public void GetItem(Item item){
 		for (int i = 0; i < 4; i++) {
 			if(m_item[i] == null){
 				m_item[i] = item;
@@ -175,7 +181,16 @@ public class Player : MonoBehaviour {
 		
 		yield break;
 	}
-	
+
+	public void SetArmor(bool isArmor){
+		m_isArmor = isArmor;
+	}
+
+	public bool GetArmor(){
+		Debug.Log (" RETURN ARMOR : " + m_isArmor);
+		return m_isArmor;
+	}
+
 	// Get current position
 	
 	public int GetCurrentPos(){
@@ -214,11 +229,19 @@ public class Player : MonoBehaviour {
 		return m_stopTurn;
 	}
 
+	public bool IsDoubleDice(){
+		return m_isDoubleDice;
+	}
+
+	public void SetIsDoubleDice(bool isDoubleDice){
+		m_isDoubleDice = isDoubleDice;
+	}
+
 	public void DecreaseEventStop(){
 		m_stopTurn --;
 	}
 
-	public void SetPath(List<GameObject> path){
+	public void SetPath(List<FloorProperties> path){
 		m_path = path;
 	}
 	

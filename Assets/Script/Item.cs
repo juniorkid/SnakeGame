@@ -1,13 +1,22 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ItemClass : EventClass {
-	public ItemClass m_card;
+public class Item : EventClass {
+	public Item m_card;
 	public SpriteRenderer m_spriteRend;
 
 	public bool m_isUseItem = false;
 
-	public void SetCardItem(ItemClass card){
+	public Gamecontroller m_gameController;
+
+	public bool m_isArmor = false;
+
+	void Start(){
+		m_spriteRend = gameObject.GetComponent<SpriteRenderer> ();
+		m_gameController = Gamecontroller.Getsingleton ();
+	}
+
+	public void SetCardItem(Item card){
 		Sprite sprite;
 		m_card = card;
 		if(card != null)
@@ -20,7 +29,7 @@ public class ItemClass : EventClass {
 
 	void OnMouseDown(){
 		Debug.Log ("CLICK ITEM : " + m_card);
-		if (!m_isUseItem) {
+		if (!m_isUseItem && m_card != null && m_gameController.m_stateID == GameStateID.Rolling) {
 			m_isUseItem = true;
 			StartCoroutine (UseItem ());
 		}
@@ -30,9 +39,11 @@ public class ItemClass : EventClass {
 		yield break;
 	}
 
+	// Use item ability	
 	public IEnumerator UseItem(){
-		yield return StartCoroutine (m_card.ItemAbility ());
+		Debug.Log ("USE ITEM");
 		m_spriteRend.sprite = null;
+		yield return StartCoroutine (m_card.ItemAbility ());
 		Destroy (m_card.gameObject);
 		m_isUseItem = false;
 	}

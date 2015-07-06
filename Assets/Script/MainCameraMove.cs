@@ -34,7 +34,7 @@ public class MainCameraMove : MonoBehaviour {
 	}
 
 	// Move camera along path at start game
-	public IEnumerator MoveCameraFollowPath(List<GameObject> path){
+	public IEnumerator MoveCameraFollowPath(List<FloorProperties> path){
 
 		// Set to hide dice and button roll
 		m_dice.SetActive (false);
@@ -44,7 +44,7 @@ public class MainCameraMove : MonoBehaviour {
 
 	//	yield return new WaitForSeconds (1f);
 		
-		foreach(GameObject pos in path){
+		foreach(FloorProperties pos in path){
 		//	Debug.Log (pos);
 
 			currPos = pos.transform.position;
@@ -77,10 +77,6 @@ public class MainCameraMove : MonoBehaviour {
 		// Move to position
 
 		iTween.MoveTo(gameObject, pos, m_moveSpeed);
-
-		// Delay wait camera move
-
-		yield return new WaitForSeconds (0.5f);
 
 		Debug.Log ("SET POSITION");
 

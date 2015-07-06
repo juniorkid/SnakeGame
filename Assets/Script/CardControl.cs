@@ -51,6 +51,8 @@ public class CardControl : EventClass {
 	// Use this for initialization
 	void Start () {
 
+		m_gameController = Gamecontroller.Getsingleton ();
+
 		// Set main camera move and Drag cameara
 		m_dragCamera = m_mainCamera.GetComponent<DragCamera> ();
 	//	m_mainCamearaMove = m_mainCamera.GetComponent<MainCameraMove> ();

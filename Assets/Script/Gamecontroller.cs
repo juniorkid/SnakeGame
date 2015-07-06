@@ -17,18 +17,16 @@ public enum GameStateID
 public class Gamecontroller : MonoBehaviour {
 	public Camera m_mainCamera;
 	
-	private List<GameObject> m_path;
+	public List<FloorProperties> m_path;
 
 	private int m_pointDice;
 	
 	public Player[] m_player;
 	
-	private string m_state;
-	
 	public Dice m_dice;
 	
 	public Roll m_buttonRoll;
-	private GameStateID m_stateID;
+	public GameStateID m_stateID;
 	
 	public Createfloor m_createFloor;
 	public CreateEvent m_createEvent;
@@ -41,8 +39,19 @@ public class Gamecontroller : MonoBehaviour {
 	
 	private int m_maxNode;
 	
-	private MainCameraMove m_mainCameraMove;
+	public MainCameraMove m_mainCameraMove;
+
+	private static Gamecontroller m_singleton;
+	public static Gamecontroller Getsingleton(){
+		return m_singleton;
+	}
 	
+	void Awake()
+	{
+		m_singleton = this;
+	}
+
+
 	// Use this for initialization
 	void Start () {
 		
@@ -82,7 +91,7 @@ public class Gamecontroller : MonoBehaviour {
 	}
 	
 	// Move camera along path at start game
-	private IEnumerator MoveCamera(List<GameObject> path){
+	private IEnumerator MoveCamera(List<FloorProperties> path){
 		yield return StartCoroutine (m_mainCameraMove.FindStartPos());
 		
 		yield return StartCoroutine (m_mainCameraMove.MoveCameraFollowPath(path));
@@ -179,21 +188,18 @@ public class Gamecontroller : MonoBehaviour {
 		// Can't drag
 		m_dragCamera.SetIsDrag (false);
 
-		int normalMode = 0;
-		
-		m_stateID = GameStateID.Rolling;
-		
-		// Set button can click
-		m_buttonRoll.SetClick (false);
-		
-		// Delay wait for set button
-		yield return new WaitForSeconds (0.5f);
-
 		// Change player windows
 		m_player [m_currID].ChangePlayerWindow ();
 
+		m_stateID = GameStateID.Rolling;
+
 		// Move player to center of floor
 		m_player[m_currID].MoveToCenter ();
+
+		int normalMode = 0;
+		
+		// Set button can click
+		m_buttonRoll.SetClick (false);
 
 		// Move camera to player
 		yield return StartCoroutine( m_mainCameraMove.SetPosition (m_player[m_currID].transform.position));
@@ -303,13 +309,18 @@ public class Gamecontroller : MonoBehaviour {
 		// Delay for wait check
 		yield return new WaitForSeconds(0.5f);
 
-		// Move to check point
-		if(!m_player[m_currID].IsUFO())
-			m_player[m_currID].MoveToCheckPoint ();
-		yield return new WaitForSeconds (0.5f);
+		if (!m_player [m_currID].IsDoubleDice ()) {
+			// Move to check point
+			if (!m_player [m_currID].IsUFO ())
+				m_player [m_currID].MoveToCheckPoint ();
+			yield return new WaitForSeconds (0.5f);
 
-		// Change player
-		ChangePlayerTurn ();
+			// Change player
+
+			ChangePlayerTurn ();
+		}
+		else
+			m_player [m_currID].SetIsDoubleDice (false);
 
 		m_dragCamera.SetIsDrag (true);
 
@@ -330,5 +341,4 @@ public class Gamecontroller : MonoBehaviour {
 	public Player GetCurrentPlayer(){
 		return m_player[m_currID];
 	}
-	
 }

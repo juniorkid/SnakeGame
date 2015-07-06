@@ -6,13 +6,15 @@ public class UFOEvent : EventClass {
 	public UFOControl m_ufoControl;
 
 	public override IEnumerator DoEvent(Player player){
-		m_ufoControl = player.GetUFO ();
-		player.SetEventStop (1);
-		player.SetIsUFO (true);
+		if (!IsArmor (player)) {
+			m_ufoControl = player.GetUFO ();
+			player.SetEventStop (1);
+			player.SetIsUFO (true);
 
-		yield return	StartCoroutine (m_ufoControl.SetAnimationUFO ());
+			yield return	StartCoroutine (m_ufoControl.SetAnimationUFO ());
 
-		Debug.Log ("END UFO EVENT");
+			Debug.Log ("END UFO EVENT");
+		}
 
 		// Delete object when event has done
 		Destroy (gameObject);

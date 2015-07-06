@@ -18,7 +18,7 @@ public class CreateEvent : MonoBehaviour {
 
 
 	// Use to create all Event
-	public void CreateAllEvent(List<GameObject> path){
+	public void CreateAllEvent(List<FloorProperties> path){
 		int maxNode = path.Count;
 
 		Debug.Log (maxNode);

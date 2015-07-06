@@ -14,7 +14,7 @@ public enum FloorState
 
 public class Createfloor : MonoBehaviour {
 
-	private List<GameObject> m_path;
+	private List<FloorProperties> m_path;
 
 	private FloorState m_floorStateID;
 
@@ -54,7 +54,7 @@ public class Createfloor : MonoBehaviour {
 		GameObject floor;
 
 		// Initialize List for keep path
-		m_path = new List<GameObject> ();
+		m_path = new List<FloorProperties> ();
 		m_isCreateEnd = false;
 		m_numFloor = 0;
 
@@ -66,7 +66,7 @@ public class Createfloor : MonoBehaviour {
 
 		floor = Instantiate (m_startFloor, new Vector3 (0.95f, -3.38f, 2), Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;
-		m_path.Add (floor);
+		m_path.Add (floor.GetComponent<FloorProperties>());
 
 		// Set right X and left X
 		m_rightX = 0.95f;
@@ -170,7 +170,7 @@ public class Createfloor : MonoBehaviour {
 			m_lastFloorPos = floor.transform.position;		
 
 			// Add floor in path
-			m_path.Add(floor);
+			m_path.Add(floor.GetComponent<FloorProperties>());
 			m_numFloor++;
 
 			// Find x in right and left
@@ -208,7 +208,7 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
 
 		// Add floor in path
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 
 		// Find x in right and left
@@ -232,7 +232,7 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
 
 		// Add floor in path
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 
 		// Find x in right and left
@@ -256,7 +256,7 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
 
 		// Add floor in path
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 
 		// Find x in right and left
@@ -279,7 +279,7 @@ public class Createfloor : MonoBehaviour {
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
 	
 		// Add floor in path
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 
 		// Find x in right and left
@@ -296,7 +296,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 1.3f;
 		thisFloorPos.y += 1.3f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -311,7 +311,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 1.0f;
 		thisFloorPos.y += 1.8f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -339,7 +339,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 0.6f;
 		thisFloorPos.y += 1.5f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -354,7 +354,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 1.2f;
 		thisFloorPos.y += 1f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -369,7 +369,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 1.6f;
 		thisFloorPos.y += 0.6f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -383,7 +383,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.z = 0;
 		thisFloorPos.x -= 1.4f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -398,7 +398,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 1.6f;
 		thisFloorPos.y -= 0.6f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		
@@ -413,7 +413,7 @@ public class Createfloor : MonoBehaviour {
 		thisFloorPos.x -= 0.4f;
 		thisFloorPos.y -= 1.2f;
 		Instantiate (m_textNumFloor, thisFloorPos, Quaternion.identity);
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 
@@ -449,14 +449,14 @@ public class Createfloor : MonoBehaviour {
 		m_lastFloorPos.y += 0.15f;
 		floor = Instantiate (m_winFloor, m_lastFloorPos, Quaternion.identity) as GameObject;
 		m_lastFloorPos = floor.transform.position;		
-		m_path.Add(floor);
+		m_path.Add(floor.GetComponent<FloorProperties>());
 		m_numFloor++;
 		FindX(floor.transform.position.x);
 		m_isCreateEnd = true;
 	}
 
 	// Get all path
-	public List<GameObject> GetPath(){
+	public List<FloorProperties> GetPath(){
 		return m_path;
 	}
 	

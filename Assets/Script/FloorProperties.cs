@@ -9,14 +9,11 @@ public class FloorProperties : MonoBehaviour {
 
 	private EventClass m_eventObj ;
 
-	private string m_eventType;
-
 	private CardControl m_cardControl;
 
 	void Start(){
 		m_cardControl = CardControl.Getsingleton ();
 		m_eventObj = null;
-		m_eventType = "Normal";
 		m_isCanDestroy = false;
 	}
 	
@@ -66,18 +63,9 @@ public class FloorProperties : MonoBehaviour {
 
 	public void SetEvent(EventClass eventObj){
 		m_eventObj = eventObj;
-//		Debug.Log (m_eventObj);
 	}
 
 	public EventClass GetEvent(){
 		return m_eventObj;
-	}
-
-	public string GetEventType(){
-		return m_eventType;
-	}
-
-	public void SetEventType(string eventType){
-		m_eventType = eventType;
 	}
 }

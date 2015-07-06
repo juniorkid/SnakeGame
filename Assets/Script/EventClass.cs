@@ -9,6 +9,7 @@ public enum EVENT_TYPE
 // Mother class for event
 public class EventClass : MonoBehaviour{
 
+	public string m_iconName ;
 
 	// Use this for initialization
 	public virtual IEnumerator DoEvent(Player player = null)
@@ -36,5 +37,15 @@ public class EventClass : MonoBehaviour{
 		// Set item to defualt position
 		iconTrap.transform.position = lastPos;
 
+	}
+
+	public bool IsArmor(Player player){
+		Debug.Log ("GET ARMOR : " + player.GetArmor ());
+
+		if (player.GetArmor ()) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }
