@@ -10,8 +10,8 @@ public class DiceItem : Item {
 
 	public override IEnumerator ItemAbility ()
 	{
-		m_dice = GameObject.FindWithTag ("Dice").GetComponent<Dice>();
-		m_roll = GameObject.FindWithTag ("Roll").GetComponent<Roll>();
+		m_dice = m_gameController.m_dice;
+		m_roll = m_gameController.m_buttonRoll;
 		m_dice.m_isSetPoint = true;
 		m_dice.m_pointDice = m_point;
 		m_roll.SetClick (true);

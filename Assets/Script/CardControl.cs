@@ -24,7 +24,8 @@ public class CardControl : EventClass {
 	private GameObject m_textObj;
 
 	private DragCamera m_dragCamera;
-//	private MainCameraMove m_mainCamearaMove;
+
+	public int m_drawTime;
 
 	// Type Card
 
@@ -59,6 +60,8 @@ public class CardControl : EventClass {
 
 		Debug.Log ("Drag : " + m_dragCamera);
 
+		m_drawTime = 1;
+
 		// Get all child object (card)
 		m_allCard = gameObject.GetComponentsInChildren <Transform>();
 
@@ -86,6 +89,7 @@ public class CardControl : EventClass {
 	// Use to show card for player choose
 	public IEnumerator ControlCardFlip(){
 
+
 		Debug.Log ("DRAG IN FUNCTION : " + m_dragCamera);
 
 		// Set Can't drag when wait flip
@@ -101,12 +105,12 @@ public class CardControl : EventClass {
 		while (!m_isFinishFlip)
 			yield return null;
 
-		// Hide Card
-		ShowHideCard(false);
+		// Hide Cards
+		ShowHideCard (false);
 
 		// Set can drag
-		m_dragCamera.SetIsDrag(true);
-	
+		m_dragCamera.SetIsDrag (true);
+
 		// Set default value isfinishFlip
 		m_isFinishFlip = false;
 

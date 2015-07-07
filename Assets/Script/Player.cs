@@ -124,6 +124,10 @@ public class Player : MonoBehaviour {
 		ShowItem ();
 	}
 
+	public void SetActivePlayerWindow(bool active){
+		m_playerWindow.gameObject.SetActive (active);
+	}
+
 	// Show item in list on Slot on item
 
 	public void ShowItem(){
@@ -137,7 +141,6 @@ public class Player : MonoBehaviour {
 		for (int i = 0; i < 4; i++) {
 			if(m_item[i] == null){
 				m_item[i] = item;
-				ShowItem();
 				break;
 			}
 		}

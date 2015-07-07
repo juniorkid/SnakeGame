@@ -102,5 +102,6 @@ public class CardProp : MonoBehaviour {
 		GameObject tempItem;
 		tempItem = (GameObject)Instantiate (itemPrefab.gameObject, new Vector3 (0, 0, -20), Quaternion.identity);
 		player.GetItem (tempItem.GetComponent<Item>());
+		player.ShowItem ();
 	}	
 }

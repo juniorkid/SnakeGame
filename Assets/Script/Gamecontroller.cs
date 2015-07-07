@@ -35,7 +35,7 @@ public class Gamecontroller : MonoBehaviour {
 	
 	public int m_numPlayer;
 	
-	private int m_currID;
+	public int m_currID;
 	
 	private int m_maxNode;
 	
@@ -149,6 +149,8 @@ public class Gamecontroller : MonoBehaviour {
 	// Event State
 	private IEnumerator Event(){
 
+		m_stateID = GameStateID.DoingEvent;
+
 		// Can't drag
 		m_dragCamera.SetIsDrag (false);
 
@@ -178,6 +180,8 @@ public class Gamecontroller : MonoBehaviour {
 		// Can drag
 		m_dragCamera.SetIsDrag (true);
 
+		m_stateID = GameStateID.Moving;
+
 		yield break;
 	}
 	
@@ -189,6 +193,7 @@ public class Gamecontroller : MonoBehaviour {
 		m_dragCamera.SetIsDrag (false);
 
 		// Change player windows
+		m_player [m_currID].SetActivePlayerWindow (true);
 		m_player [m_currID].ChangePlayerWindow ();
 
 		m_stateID = GameStateID.Rolling;
@@ -205,7 +210,7 @@ public class Gamecontroller : MonoBehaviour {
 		yield return StartCoroutine( m_mainCameraMove.SetPosition (m_player[m_currID].transform.position));
 		
 		// Delay wait camera move
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.01f);
 
 		// Check time bomb
 		bool isBomb = m_player[m_currID].IsBomb();
@@ -296,6 +301,8 @@ public class Gamecontroller : MonoBehaviour {
 		//m_state = "Moving";
 		Debug.Log (m_stateID);
 
+		m_player [m_currID].SetActivePlayerWindow (false);
+
 		m_dragCamera.SetIsDrag (false);
 
 		// Wait player move
@@ -310,14 +317,14 @@ public class Gamecontroller : MonoBehaviour {
 		yield return new WaitForSeconds(0.5f);
 
 		if (!m_player [m_currID].IsDoubleDice ()) {
-			// Move to check point
-			if (!m_player [m_currID].IsUFO ())
-				m_player [m_currID].MoveToCheckPoint ();
+
+			ChangePlayerTurn ();
+	
 			yield return new WaitForSeconds (0.5f);
 
 			// Change player
 
-			ChangePlayerTurn ();
+
 		}
 		else
 			m_player [m_currID].SetIsDoubleDice (false);
@@ -332,7 +339,10 @@ public class Gamecontroller : MonoBehaviour {
 	}
 	
 	// Change player turn
-	private void ChangePlayerTurn(){
+	public void ChangePlayerTurn(){
+		if (!m_player [m_currID].IsUFO ())
+			m_player [m_currID].MoveToCheckPoint ();
+
 		m_currID ++;
 		if (m_currID == m_numPlayer)
 			m_currID = 0;
