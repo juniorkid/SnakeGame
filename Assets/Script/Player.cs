@@ -24,7 +24,7 @@ public class Player : MonoBehaviour {
 	public Camera m_mainCamera;
 	float m_moveSpeed = 1f;
 
-	List<FloorProperties> m_path;
+	public List<FloorProperties> m_path;
 
 	private int m_stopTurn;
 
@@ -58,13 +58,21 @@ public class Player : MonoBehaviour {
 
 	private bool m_isArmor;
 
+	public Gamecontroller m_gameController ;
+
 	void Start(){
+		m_gameController = Gamecontroller.Getsingleton ();
 		m_playerPop = new PlayerPop ();
 		m_timeBomb = -1;
 		m_isUFO = false;
 		m_playerPop.SetId (m_id);
 		m_playerPop.m_name = m_name;
 		m_isDoubleDice = false;
+	}
+
+	void OnMouseDown(){
+		if(m_gameController.m_eventID == EventStateID.Swap)
+			m_gameController.m_playerClick = this;
 	}
 
 	// Use to go next position by pointDice
@@ -198,6 +206,10 @@ public class Player : MonoBehaviour {
 	
 	public int GetCurrentPos(){
 		return m_currentPos;
+	}
+
+	public void SetCurrentPos(int pos){
+		m_currentPos = pos;
 	}
 
 	public void SetStartPos(){

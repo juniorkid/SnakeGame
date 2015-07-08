@@ -14,6 +14,13 @@ public enum GameStateID
 	Getting,
 }
 
+public enum EventStateID
+{
+	LoosenTrap,
+	Swap,
+	NoEvent,
+}
+
 public class Gamecontroller : MonoBehaviour {
 	public Camera m_mainCamera;
 	
@@ -40,6 +47,10 @@ public class Gamecontroller : MonoBehaviour {
 	private int m_maxNode;
 	
 	public MainCameraMove m_mainCameraMove;
+
+	public EventStateID m_eventID;
+
+	public Player m_playerClick;
 
 	private static Gamecontroller m_singleton;
 	public static Gamecontroller Getsingleton(){

@@ -14,7 +14,8 @@ public class ResetEvent : EventClass {
 
 			// Move player to start position
 			yield return StartCoroutine (player.GoAnyPos (0));	
-		}
+		} else
+			player.SetArmor (false);
 
 		// Delete object when event has done
 		Destroy (gameObject);
