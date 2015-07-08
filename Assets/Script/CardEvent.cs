@@ -13,10 +13,10 @@ public class CardEvent : EventClass {
 
 		player.SetActivePlayerWindow (true);
 
-		if(m_cardControl.m_drawTime != 2)
-			m_cardControl.m_drawTime = 1;
+		if(player.m_drawTime != 2)
+			player.m_drawTime = 1;
 
-		while(m_cardControl.m_drawTime != 0){
+		while(player.m_drawTime != 0){
 			// Start function show card and flip card
 			yield return StartCoroutine (m_cardControl.ControlCardFlip ());
 

@@ -8,7 +8,7 @@ public class StealItem : Item {
 
 		float chanceSteal = Random.Range (0, 1);
 	
-		if (chanceSteal >= 0) {
+		if (chanceSteal >= 0.6) {
 
 			Debug.Log("START STEAL");
 
@@ -25,13 +25,13 @@ public class StealItem : Item {
 
 			Debug.Log("PLAYER ID : " + playerID);	
 
-			int slot = (int)Random.Range(0,4);
+			int slot = (int)Random.Range(0,4 - 0.1f);
 
 			Debug.Log("SLOT : " + slot);
 
 			Player playerTarget = m_gameController.m_player[playerID];
 
-			Item itemTarget = playerTarget.m_item[0];
+			Item itemTarget = playerTarget.m_item[slot];
 
 			if(itemTarget != null){
 

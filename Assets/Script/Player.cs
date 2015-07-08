@@ -58,6 +58,8 @@ public class Player : MonoBehaviour {
 
 	private bool m_isArmor;
 
+	public int m_drawTime;
+
 	public Gamecontroller m_gameController ;
 
 	void Start(){

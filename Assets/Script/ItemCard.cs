@@ -4,10 +4,13 @@ using System.Collections;
 public class ItemCard : CardProp {
 
 	public Item m_prefab;
+
+	public bool m_isNoItem;
 	
 	public override IEnumerator DoCardEvent(Player player)
 	{
-		KeepItem(player, m_prefab);
+		if(!m_isNoItem)
+			KeepItem(player, m_prefab);
 		yield break;
 	}
 }

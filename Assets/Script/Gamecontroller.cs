@@ -18,6 +18,8 @@ public enum EventStateID
 {
 	LoosenTrap,
 	Swap,
+	Magnetic,
+	Warp,
 	NoEvent,
 }
 

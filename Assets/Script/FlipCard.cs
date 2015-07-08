@@ -97,7 +97,9 @@ public class FlipCard : MonoBehaviour {
 		m_spriteRend.sprite = m_spriteBack;
 		m_isFlip = false;
 
-		m_cardControl.m_drawTime --;
+		Gamecontroller m_gameController = Gamecontroller.Getsingleton ();
+
+		m_gameController.GetCurrentPlayer().m_drawTime --;
 
 		yield break;
 

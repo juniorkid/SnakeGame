@@ -9,8 +9,7 @@ public class DoubleDrawItem : Item {
 
 	public override IEnumerator ItemAbility ()
 	{
-		CardControl m_cardControl = CardControl.Getsingleton ();
-		m_cardControl.m_drawTime = 2;
+		m_gameController.GetCurrentPlayer().m_drawTime = 2;
 		
 		yield break;
 	}

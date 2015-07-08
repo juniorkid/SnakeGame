@@ -25,8 +25,6 @@ public class CardControl : EventClass {
 
 	private DragCamera m_dragCamera;
 
-	public int m_drawTime;
-
 	// Type Card
 
 	private CardProp m_cardObj;
@@ -59,8 +57,6 @@ public class CardControl : EventClass {
 	//	m_mainCamearaMove = m_mainCamera.GetComponent<MainCameraMove> ();
 
 		Debug.Log ("Drag : " + m_dragCamera);
-
-		m_drawTime = 1;
 
 		// Get all child object (card)
 		m_allCard = gameObject.GetComponentsInChildren <Transform>();
