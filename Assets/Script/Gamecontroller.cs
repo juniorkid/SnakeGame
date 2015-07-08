@@ -297,6 +297,9 @@ public class Gamecontroller : MonoBehaviour {
 		else {
 			Debug.Log("Player : " + (m_currID + 1).ToString() + " STOP!! " ) ;
 			m_player[m_currID].DecreaseEventStop();
+
+			yield return new WaitForSeconds(1f);
+
 			ChangePlayerTurn ();
 			
 			m_stateID = GameStateID.WaitRoll;

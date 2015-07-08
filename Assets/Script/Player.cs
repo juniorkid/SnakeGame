@@ -73,7 +73,7 @@ public class Player : MonoBehaviour {
 	}
 
 	void OnMouseDown(){
-		if(m_gameController.m_eventID == EventStateID.Swap)
+		if(m_gameController.m_eventID == EventStateID.Swap || m_gameController.m_eventID == EventStateID.Magnetic)
 			m_gameController.m_playerClick = this;
 	}
 
